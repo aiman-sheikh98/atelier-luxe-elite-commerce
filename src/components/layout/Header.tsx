@@ -1,11 +1,12 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, User, Menu, X, Search, Heart } from 'lucide-react';
+import { ShoppingBag, UserRound, Menu, X, Search, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import NotificationDropdown from '@/components/notification/NotificationDropdown';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -96,9 +97,18 @@ const Header = () => {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="text-foreground"
+                className="text-foreground relative rounded-full hover:bg-luxury/10"
               >
-                <User size={20} />
+                {isAuthenticated && user?.avatar ? (
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={user.avatar} alt={user.name} />
+                    <AvatarFallback className="bg-luxury/20 text-luxury text-xs">
+                      {user.name.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                ) : (
+                  <UserRound size={20} />
+                )}
               </Button>
             </Link>
             
@@ -159,7 +169,15 @@ const Header = () => {
               className="font-sans text-lg uppercase tracking-wide flex items-center gap-2"
               onClick={toggleMobileMenu}
             >
-              <User size={18} /> {isAuthenticated ? 'My Account' : 'Login'}
+              <UserRound size={18} /> {isAuthenticated ? 'My Account' : 'Login'}
+            </Link>
+
+            <Link
+              to="/fashion-shows"
+              className="font-sans text-lg uppercase tracking-wide"
+              onClick={toggleMobileMenu}
+            >
+              Fashion Shows
             </Link>
           </nav>
         </div>

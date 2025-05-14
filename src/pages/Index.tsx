@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
@@ -6,6 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ProductGrid from '@/components/product/ProductGrid';
 import { getFeaturedProducts, getNewArrivals, getBestsellers } from '@/data/products';
+
 const Index = () => {
   const featuredProducts = getFeaturedProducts();
   const newArrivals = getNewArrivals();
@@ -31,6 +33,7 @@ const Index = () => {
     path: '/category/clothing',
     description: 'Timeless garments with exceptional craftsmanship.'
   }];
+  
   return <>
       <Header />
       
@@ -52,7 +55,7 @@ const Index = () => {
               <Link to="/category/bags">Shop Now</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black rounded-none px-8">
-              <Link to="/about">Our Story</Link>
+              <Link to="/fashion-shows">Our Story</Link>
             </Button>
           </div>
         </div>
@@ -101,7 +104,7 @@ const Index = () => {
         
         <div className="mt-12 text-center">
           <Button asChild variant="outline" className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8">
-            <Link to="/featured">View All Featured</Link>
+              <Link to="/category/featured">View All Featured</Link>
           </Button>
         </div>
       </section>
@@ -119,7 +122,7 @@ const Index = () => {
                 Our artisans combine traditional techniques with modern innovation, creating pieces that transcend time and trend.
               </p>
               <Button asChild className="bg-luxury hover:bg-luxury-dark text-white rounded-none px-8 mt-4">
-                <Link to="/about">Discover Our Story</Link>
+                <Link to="/fashion-shows">Discover Our Story</Link>
               </Button>
             </div>
             <div className="relative">
@@ -166,4 +169,5 @@ const Index = () => {
       <Footer />
     </>;
 };
+
 export default Index;

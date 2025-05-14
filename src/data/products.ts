@@ -1,4 +1,3 @@
-
 export type Product = {
   id: string;
   name: string;
@@ -54,8 +53,8 @@ export const products: Product[] = [
     colors: ['#F5F5DC', '#21201F', '#5B432E'],
     images: [
       'https://images.unsplash.com/photo-1590739293931-a0a507c73077?q=80&w=987&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1565315292799-10c3a5723bdf?q=80&w=928&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?q=80&w=1057&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1035&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1601388362337-3961ea712be4?q=80&w=987&auto=format&fit=crop'
     ],
     new: true
   },
@@ -120,7 +119,7 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1621260860349-1b5a0e588cd3?q=80&w=1050&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1627394678286-fd8d41a826ec?q=80&w=987&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1601592996763-f05c9c80081c?q=80&w=987&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1606503825008-909a67e63c3d?q=80&w=987&auto=format&fit=crop'
     ],
     new: true
   },
@@ -297,6 +296,51 @@ export const products: Product[] = [
       'https://images.unsplash.com/photo-1590159983013-d4ff5fc71c1d?q=80&w=987&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1577900232427-18219b9166a0?q=80&w=987&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1595231776515-ddffb1f4eb73?q=80&w=987&auto=format&fit=crop'
+    ],
+    new: true
+  },
+  {
+    id: 'clothing-007',
+    name: 'Luxury Cashmere Coat',
+    category: 'clothing',
+    price: 3950,
+    description: 'Sumptuous double-faced cashmere coat with a minimalist design.',
+    details: [
+      '100% cashmere',
+      'Double-faced construction',
+      'Notched lapel collar',
+      'Concealed button closure',
+      'Belted waist',
+      'Side pockets',
+      'Made in Italy'
+    ],
+    colors: ['#21201F', '#8A6D3B', '#0F2C4A'],
+    images: [
+      'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=687&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1608234808654-2a8875faa7fd?q=80&w=741&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1591369822096-ffd140ec948f?q=80&w=687&auto=format&fit=crop'
+    ],
+    featured: true
+  },
+  {
+    id: 'clothing-008',
+    name: 'Embroidered Silk Blouse',
+    category: 'clothing',
+    price: 1850,
+    description: 'Exquisite silk blouse with intricate floral embroidery detail.',
+    details: [
+      '100% mulberry silk',
+      'Hand-embroidered floral details',
+      'Relaxed fit',
+      'Button closure',
+      'Slightly puffed sleeves',
+      'Dry clean only'
+    ],
+    colors: ['#F5F5DC', '#0F2C4A', '#90002D'],
+    images: [
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=662&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1560379099-543ab70a2275?q=80&w=387&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1502163140606-888448ae8cfe?q=80&w=987&auto=format&fit=crop'
     ],
     new: true
   }

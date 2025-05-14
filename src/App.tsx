@@ -13,6 +13,7 @@ import Profile from "./pages/Profile";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import Wishlist from "./pages/Wishlist";
 import NotFound from "./pages/NotFound";
+import FashionShows from "./pages/FashionShows";
 import { CartProvider } from "./context/CartContext";
 import { AuthProvider } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
@@ -37,6 +38,7 @@ const App = () => (
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
                 <Route path="/wishlist" element={<Wishlist />} />
+                <Route path="/fashion-shows" element={<FashionShows />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

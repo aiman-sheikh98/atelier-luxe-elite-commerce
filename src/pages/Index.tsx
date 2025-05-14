@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
@@ -7,51 +6,38 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ProductGrid from '@/components/product/ProductGrid';
 import { getFeaturedProducts, getNewArrivals, getBestsellers } from '@/data/products';
-
 const Index = () => {
   const featuredProducts = getFeaturedProducts();
   const newArrivals = getNewArrivals();
   const bestsellers = getBestsellers();
-  
-  const categories = [
-    { 
-      name: 'Bags', 
-      image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1035&auto=format&fit=crop', 
-      path: '/category/bags',
-      description: 'Iconic designs crafted from the finest materials.'
-    },
-    { 
-      name: 'Wallets', 
-      image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=987&auto=format&fit=crop', 
-      path: '/category/wallets',
-      description: 'Functional elegance for the discerning customer.'
-    },
-    { 
-      name: 'Sneakers', 
-      image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=987&auto=format&fit=crop', 
-      path: '/category/sneakers',
-      description: 'Where comfort meets uncompromising style.'
-    },
-    { 
-      name: 'Clothing', 
-      image: 'https://images.unsplash.com/photo-1598522140397-c94913554fb9?q=80&w=987&auto=format&fit=crop', 
-      path: '/category/clothing',
-      description: 'Timeless garments with exceptional craftsmanship.'
-    },
-  ];
-
-  return (
-    <>
+  const categories = [{
+    name: 'Bags',
+    image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1035&auto=format&fit=crop',
+    path: '/category/bags',
+    description: 'Iconic designs crafted from the finest materials.'
+  }, {
+    name: 'Wallets',
+    image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=987&auto=format&fit=crop',
+    path: '/category/wallets',
+    description: 'Functional elegance for the discerning customer.'
+  }, {
+    name: 'Sneakers',
+    image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=987&auto=format&fit=crop',
+    path: '/category/sneakers',
+    description: 'Where comfort meets uncompromising style.'
+  }, {
+    name: 'Clothing',
+    image: 'https://images.unsplash.com/photo-1598522140397-c94913554fb9?q=80&w=987&auto=format&fit=crop',
+    path: '/category/clothing',
+    description: 'Timeless garments with exceptional craftsmanship.'
+  }];
+  return <>
       <Header />
       
       {/* Hero Section */}
       <section className="relative h-screen">
         <div className="absolute inset-0 bg-black">
-          <img 
-            src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1974&auto=format&fit=crop" 
-            alt="Luxury Fashion" 
-            className="w-full h-full object-cover opacity-90"
-          />
+          <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1974&auto=format&fit=crop" alt="Luxury Fashion" className="w-full h-full object-cover opacity-90" />
         </div>
         
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center p-4">
@@ -62,19 +48,10 @@ const Index = () => {
             Craftsmanship, heritage and exceptional materials define our collection
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4">
-            <Button 
-              asChild
-              size="lg" 
-              className="bg-luxury hover:bg-luxury-dark text-white rounded-none px-8"
-            >
+            <Button asChild size="lg" className="bg-luxury hover:bg-luxury-dark text-white rounded-none px-8">
               <Link to="/category/bags">Shop Now</Link>
             </Button>
-            <Button 
-              asChild
-              size="lg" 
-              variant="outline" 
-              className="border-white text-white hover:bg-white hover:text-black rounded-none px-8"
-            >
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black rounded-none px-8">
               <Link to="/about">Our Story</Link>
             </Button>
           </div>
@@ -89,18 +66,9 @@ const Index = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {categories.map((category, index) => (
-            <Link 
-              key={category.name} 
-              to={category.path} 
-              className="group relative overflow-hidden block"
-            >
+          {categories.map((category, index) => <Link key={category.name} to={category.path} className="group relative overflow-hidden block">
               <div className="aspect-[4/3] bg-muted">
-                <img 
-                  src={category.image} 
-                  alt={category.name} 
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                />
+                <img src={category.image} alt={category.name} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-8">
                 <h3 className="text-white text-2xl font-serif">{category.name}</h3>
@@ -110,8 +78,7 @@ const Index = () => {
                   <ChevronRight size={16} className="ml-1 transition-transform group-hover:translate-x-1" />
                 </div>
               </div>
-            </Link>
-          ))}
+            </Link>)}
         </div>
       </section>
       
@@ -121,11 +88,7 @@ const Index = () => {
           <ProductGrid products={newArrivals} title="New Arrivals" />
           
           <div className="mt-12 text-center">
-            <Button 
-              asChild
-              variant="outline" 
-              className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8"
-            >
+            <Button asChild variant="outline" className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8">
               <Link to="/new-arrivals">View All New Arrivals</Link>
             </Button>
           </div>
@@ -137,11 +100,7 @@ const Index = () => {
         <ProductGrid products={featuredProducts} title="Featured Products" />
         
         <div className="mt-12 text-center">
-          <Button 
-            asChild
-            variant="outline" 
-            className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8"
-          >
+          <Button asChild variant="outline" className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8">
             <Link to="/featured">View All Featured</Link>
           </Button>
         </div>
@@ -159,19 +118,12 @@ const Index = () => {
               <p className="text-lg text-muted-foreground mb-6">
                 Our artisans combine traditional techniques with modern innovation, creating pieces that transcend time and trend.
               </p>
-              <Button 
-                asChild
-                className="bg-luxury hover:bg-luxury-dark text-white rounded-none px-8 mt-4"
-              >
+              <Button asChild className="bg-luxury hover:bg-luxury-dark text-white rounded-none px-8 mt-4">
                 <Link to="/about">Discover Our Story</Link>
               </Button>
             </div>
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?q=80&w=1065&auto=format&fit=crop" 
-                alt="Artisan craftsmanship" 
-                className="w-full h-auto"
-              />
+              <img alt="Artisan craftsmanship" className="w-full h-auto" src="https://in.louisvuitton.com/content/dam/lv/online/high-end/wolv/art-et-culture/espaces-lv/U_AC_Espace_Louis_Vuitton_Venezia_V2.html/jcr:content/assets/caroussel/desktop/1_ESPACE_LV_VENEZIA_5925_LVCOM_2048x1152.jpg?imwidth=4096" />
             </div>
           </div>
         </div>
@@ -182,11 +134,7 @@ const Index = () => {
         <ProductGrid products={bestsellers} title="Bestsellers" />
         
         <div className="mt-12 text-center">
-          <Button 
-            asChild
-            variant="outline" 
-            className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8"
-          >
+          <Button asChild variant="outline" className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8">
             <Link to="/bestsellers">View All Bestsellers</Link>
           </Button>
         </div>
@@ -202,12 +150,7 @@ const Index = () => {
             </p>
             
             <form className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="flex-1 border border-border bg-background px-4 py-3 outline-none focus:border-luxury"
-                required
-              />
+              <input type="email" placeholder="Your email address" className="flex-1 border border-border bg-background px-4 py-3 outline-none focus:border-luxury" required />
               <Button className="bg-luxury hover:bg-luxury-dark text-white rounded-none">
                 Subscribe
               </Button>
@@ -221,8 +164,6 @@ const Index = () => {
       </section>
       
       <Footer />
-    </>
-  );
+    </>;
 };
-
 export default Index;

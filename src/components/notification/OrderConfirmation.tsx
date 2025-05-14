@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { Check } from 'lucide-react';
 import { toast } from 'sonner';
+import { useNotifications } from '@/context/NotificationContext';
 
 interface OrderConfirmationNotificationProps {
   orderNumber: string;
@@ -9,11 +10,21 @@ interface OrderConfirmationNotificationProps {
 }
 
 export const showOrderConfirmation = (orderNumber: string) => {
+  // Show the toast notification
   toast.custom((id) => (
     <OrderConfirmationNotification orderNumber={orderNumber} onClose={() => toast.dismiss(id)} />
   ), {
     duration: 8000,
     id: 'order-confirmation'
+  });
+  
+  // Add to notification center
+  const { addNotification } = require('@/context/NotificationContext').useNotifications();
+  
+  addNotification({
+    title: 'Order Confirmed',
+    description: `Your order #${orderNumber} has been confirmed and is being processed.`,
+    type: 'order'
   });
 };
 

@@ -5,6 +5,7 @@ import { ShoppingBag, User, Menu, X, Search, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
+import NotificationDropdown from '@/components/notification/NotificationDropdown';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -77,6 +78,9 @@ const Header = () => {
             >
               <Search size={20} />
             </Button>
+            
+            {/* Notification dropdown */}
+            <NotificationDropdown />
             
             <Link to="/wishlist">
               <Button 

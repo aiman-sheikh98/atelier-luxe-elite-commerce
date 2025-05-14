@@ -29,7 +29,11 @@ export const products: Product[] = [
       'Dimensions: 11.8" x 6.7" x 4.3"'
     ],
     colors: ['#A1866E', '#21201F', '#90002D'],
-    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    images: [
+      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1035&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=987&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1169&auto=format&fit=crop'
+    ],
     featured: true,
     bestseller: true
   },
@@ -48,7 +52,11 @@ export const products: Product[] = [
       'Dimensions: 13.4" x 10.2" x 5.9"'
     ],
     colors: ['#F5F5DC', '#21201F', '#5B432E'],
-    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    images: [
+      'https://images.unsplash.com/photo-1590739293931-a0a507c73077?q=80&w=987&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1565315292799-10c3a5723bdf?q=80&w=928&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?q=80&w=1057&auto=format&fit=crop'
+    ],
     new: true
   },
   {
@@ -66,7 +74,11 @@ export const products: Product[] = [
       'Dimensions: 10" x 6" x 2.75"'
     ],
     colors: ['#21201F', '#A52A2A', '#F5F5DC'],
-    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg']
+    images: [
+      'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?q=80&w=1171&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1575032617751-6ddec2089882?q=80&w=1074&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1035&auto=format&fit=crop'
+    ]
   },
   {
     id: 'wallet-001',
@@ -83,7 +95,11 @@ export const products: Product[] = [
       'Dimensions: 3.7" x 7.5" x 0.4"'
     ],
     colors: ['#A1866E', '#21201F'],
-    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    images: [
+      'https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=987&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1579437256055-1e90a82f5d72?q=80&w=1074&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1559139010-557cb61f64d5?q=80&w=1141&auto=format&fit=crop'
+    ],
     bestseller: true
   },
   {
@@ -101,7 +117,11 @@ export const products: Product[] = [
       'Dimensions: 7.5" x 4" x 1"'
     ],
     colors: ['#21201F', '#8A6D3B', '#FFF8DC'],
-    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    images: [
+      'https://images.unsplash.com/photo-1621260860349-1b5a0e588cd3?q=80&w=1050&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1627394678286-fd8d41a826ec?q=80&w=987&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1601592996763-f05c9c80081c?q=80&w=987&auto=format&fit=crop'
+    ],
     new: true
   },
   {
@@ -119,7 +139,11 @@ export const products: Product[] = [
       'Made in Italy'
     ],
     colors: ['#FFFFFF', '#21201F', '#8A6D3B'],
-    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    images: [
+      'https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=1064&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1170&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=1160&auto=format&fit=crop'
+    ],
     featured: true
   },
   {
@@ -137,7 +161,11 @@ export const products: Product[] = [
       'Logo-embossed tongue'
     ],
     colors: ['#A1866E', '#21201F'],
-    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    images: [
+      'https://images.unsplash.com/photo-1600269452121-4f2416e55c28?q=80&w=1065&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=987&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?q=80&w=1112&auto=format&fit=crop'
+    ],
     new: true
   },
   {
@@ -155,7 +183,11 @@ export const products: Product[] = [
       'Double back vent'
     ],
     colors: ['#21201F', '#0F2C4A', '#5B432E'],
-    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    images: [
+      'https://images.unsplash.com/photo-1598522140397-c94913554fb9?q=80&w=987&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=1060&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1598971639058-bb4741e9650b?q=80&w=976&auto=format&fit=crop'
+    ],
     bestseller: true
   },
   {
@@ -173,7 +205,11 @@ export const products: Product[] = [
       'Signature gold-tone button details'
     ],
     colors: ['#21201F', '#8A6D3B', '#90002D'],
-    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    images: [
+      'https://images.unsplash.com/photo-1596783074918-c84cb06531ca?q=80&w=987&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=987&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1550639525-c97d455acf70?q=80&w=926&auto=format&fit=crop'
+    ],
     featured: true
   },
   {
@@ -191,7 +227,11 @@ export const products: Product[] = [
       'Dry clean only'
     ],
     colors: ['#FFF8DC', '#21201F', '#0F2C4A', '#5B432E'],
-    images: ['/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
+    images: [
+      'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=1011&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1543076447-215ad9ba6923?q=80&w=1074&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?q=80&w=987&auto=format&fit=crop'
+    ],
     new: true
   }
 ];

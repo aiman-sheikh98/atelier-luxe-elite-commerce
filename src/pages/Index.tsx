@@ -16,25 +16,25 @@ const Index = () => {
   const categories = [
     { 
       name: 'Bags', 
-      image: '/placeholder.svg', 
+      image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1035&auto=format&fit=crop', 
       path: '/category/bags',
       description: 'Iconic designs crafted from the finest materials.'
     },
     { 
       name: 'Wallets', 
-      image: '/placeholder.svg', 
+      image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?q=80&w=987&auto=format&fit=crop', 
       path: '/category/wallets',
       description: 'Functional elegance for the discerning customer.'
     },
     { 
       name: 'Sneakers', 
-      image: '/placeholder.svg', 
+      image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=987&auto=format&fit=crop', 
       path: '/category/sneakers',
       description: 'Where comfort meets uncompromising style.'
     },
     { 
       name: 'Clothing', 
-      image: '/placeholder.svg', 
+      image: 'https://images.unsplash.com/photo-1598522140397-c94913554fb9?q=80&w=987&auto=format&fit=crop', 
       path: '/category/clothing',
       description: 'Timeless garments with exceptional craftsmanship.'
     },
@@ -48,7 +48,7 @@ const Index = () => {
       <section className="relative h-screen">
         <div className="absolute inset-0 bg-black">
           <img 
-            src="/placeholder.svg" 
+            src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1974&auto=format&fit=crop" 
             alt="Luxury Fashion" 
             className="w-full h-full object-cover opacity-90"
           />
@@ -168,7 +168,7 @@ const Index = () => {
             </div>
             <div className="relative">
               <img 
-                src="/placeholder.svg" 
+                src="https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?q=80&w=1065&auto=format&fit=crop" 
                 alt="Artisan craftsmanship" 
                 className="w-full h-auto"
               />

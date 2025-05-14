@@ -233,6 +233,72 @@ export const products: Product[] = [
       'https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?q=80&w=987&auto=format&fit=crop'
     ],
     new: true
+  },
+  {
+    id: 'clothing-004',
+    name: 'Signature Leather Jacket',
+    category: 'clothing',
+    price: 4950,
+    description: 'Premium calfskin leather jacket with distinctive design details.',
+    details: [
+      'Full-grain calfskin leather',
+      'Slim fit',
+      'Front zip closure',
+      'Side zip pockets',
+      'Quilted shoulder panels',
+      'Signature hardware',
+      'Made in Italy'
+    ],
+    colors: ['#21201F', '#5B432E', '#8A6D3B'],
+    images: [
+      'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=935&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?q=80&w=1036&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1036&auto=format&fit=crop'
+    ],
+    featured: true
+  },
+  {
+    id: 'clothing-005',
+    name: 'Fine Merino Wool Turtleneck',
+    category: 'clothing',
+    price: 890,
+    description: 'Refined turtleneck sweater crafted from Italian merino wool.',
+    details: [
+      '100% Italian merino wool',
+      'Slim fit',
+      'Ribbed turtleneck, cuffs and hem',
+      'Lightweight and breathable',
+      'Hand wash cold'
+    ],
+    colors: ['#0F2C4A', '#21201F', '#5B432E', '#FFF8DC'],
+    images: [
+      'https://images.unsplash.com/photo-1603252109303-2751441dd157?q=80&w=987&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1577538928305-3807c3993047?q=80&w=1170&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1541346183200-e8e117785358?q=80&w=1010&auto=format&fit=crop'
+    ],
+    bestseller: true
+  },
+  {
+    id: 'clothing-006',
+    name: 'Pleated Silk Maxi Skirt',
+    category: 'clothing',
+    price: 1890,
+    description: 'Elegant pleated maxi skirt in lightweight silk twill.',
+    details: [
+      '100% silk twill',
+      'High waist',
+      'Side zip closure',
+      'All-around pleats',
+      'Full-length',
+      'Dry clean only'
+    ],
+    colors: ['#8A6D3B', '#21201F', '#90002D'],
+    images: [
+      'https://images.unsplash.com/photo-1590159983013-d4ff5fc71c1d?q=80&w=987&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1577900232427-18219b9166a0?q=80&w=987&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1595231776515-ddffb1f4eb73?q=80&w=987&auto=format&fit=crop'
+    ],
+    new: true
   }
 ];
 

@@ -1,20 +1,33 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/context/AuthContext';
 
+// Form validation schemas
+const loginSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
+const registerSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
+
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [isLoginForm, setIsLoginForm] = useState(true);
-  const [name, setName] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   
-  const { login, register } = useAuth();
+  const { login, register: registerUser, isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -22,25 +35,57 @@ const Login = () => {
   const searchParams = new URLSearchParams(location.search);
   const redirectTo = searchParams.get('redirect') || '/';
   
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    
-    try {
-      if (isLoginForm) {
-        await login(email, password);
-      } else {
-        await register(name, email, password);
-      }
-      
-      // Redirect after successful login/register
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
       navigate(redirectTo === 'checkout' ? '/checkout' : `/${redirectTo}`);
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
-    } finally {
-      setLoading(false);
     }
+  }, [isAuthenticated, navigate, redirectTo]);
+  
+  // Login form
+  const loginForm = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+  
+  // Register form
+  const registerForm = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+    },
+  });
+  
+  const handleLoginSubmit = async (values: z.infer<typeof loginSchema>) => {
+    try {
+      setError('');
+      await login(values.email, values.password);
+      // Auth state change will handle navigation
+    } catch (err: any) {
+      // Error is handled in the login function
+      setError(err.message || 'Login failed');
+    }
+  };
+  
+  const handleRegisterSubmit = async (values: z.infer<typeof registerSchema>) => {
+    try {
+      setError('');
+      await registerUser(values.name, values.email, values.password);
+      // Auth state change will handle navigation
+    } catch (err: any) {
+      // Error is handled in the register function 
+      setError(err.message || 'Registration failed');
+    }
+  };
+  
+  const toggleForm = () => {
+    setIsLoginForm(!isLoginForm);
+    setError('');
   };
   
   return (
@@ -59,70 +104,134 @@ const Login = () => {
             </div>
           )}
           
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {!isLoginForm && (
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">
-                  Name
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full p-3 border border-border focus:border-luxury outline-none"
-                  required={!isLoginForm}
+          {isLoginForm ? (
+            <Form {...loginForm}>
+              <form onSubmit={loginForm.handleSubmit(handleLoginSubmit)} className="space-y-6">
+                <FormField
+                  control={loginForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="block text-sm font-medium mb-2">Email</FormLabel>
+                      <FormControl>
+                        <Input 
+                          {...field} 
+                          type="email" 
+                          className="w-full p-3 border border-border focus:border-luxury outline-none" 
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-            )}
-            
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-2">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 border border-border focus:border-luxury outline-none"
-                required
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-2">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 border border-border focus:border-luxury outline-none"
-                required
-              />
-            </div>
-            
-            <Button 
-              type="submit" 
-              disabled={loading}
-              className="w-full bg-luxury hover:bg-luxury-dark text-white py-6"
-            >
-              {loading 
-                ? 'Please wait...' 
-                : isLoginForm 
-                  ? 'Sign In' 
-                  : 'Create Account'}
-            </Button>
-          </form>
+                
+                <FormField
+                  control={loginForm.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="block text-sm font-medium mb-2">Password</FormLabel>
+                      <FormControl>
+                        <Input 
+                          {...field} 
+                          type="password" 
+                          className="w-full p-3 border border-border focus:border-luxury outline-none" 
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <Button 
+                  type="submit" 
+                  disabled={isLoading}
+                  className="w-full bg-luxury hover:bg-luxury-dark text-white py-6"
+                >
+                  {isLoading ? 'Please wait...' : 'Sign In'}
+                </Button>
+              </form>
+            </Form>
+          ) : (
+            <Form {...registerForm}>
+              <form onSubmit={registerForm.handleSubmit(handleRegisterSubmit)} className="space-y-6">
+                <FormField
+                  control={registerForm.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="block text-sm font-medium mb-2">Name</FormLabel>
+                      <FormControl>
+                        <Input 
+                          {...field} 
+                          className="w-full p-3 border border-border focus:border-luxury outline-none" 
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={registerForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="block text-sm font-medium mb-2">Email</FormLabel>
+                      <FormControl>
+                        <Input 
+                          {...field} 
+                          type="email" 
+                          className="w-full p-3 border border-border focus:border-luxury outline-none" 
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={registerForm.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="block text-sm font-medium mb-2">Password</FormLabel>
+                      <FormControl>
+                        <Input 
+                          {...field} 
+                          type="password" 
+                          className="w-full p-3 border border-border focus:border-luxury outline-none" 
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <Button 
+                  type="submit" 
+                  disabled={isLoading}
+                  className="w-full bg-luxury hover:bg-luxury-dark text-white py-6"
+                >
+                  {isLoading ? 'Please wait...' : 'Create Account'}
+                </Button>
+              </form>
+            </Form>
+          )}
           
           <div className="mt-8 text-center">
             <p className="text-muted-foreground">
               {isLoginForm ? "Don't have an account?" : "Already have an account?"}
               <button
-                onClick={() => setIsLoginForm(!isLoginForm)}
+                onClick={toggleForm}
+                type="button"
                 className="text-luxury hover:underline ml-2"
+                disabled={isLoading}
               >
                 {isLoginForm ? 'Create one' : 'Sign in'}
               </button>
@@ -136,16 +245,6 @@ const Login = () => {
               </Link>
             </div>
           )}
-          
-          <div className="mt-10 pt-8 border-t border-border">
-            <p className="text-sm text-center text-muted-foreground mb-4">
-              For demo purposes, use:
-            </p>
-            <div className="bg-muted p-3 rounded text-sm">
-              <p><strong>Email:</strong> demo@example.com</p>
-              <p><strong>Password:</strong> password</p>
-            </div>
-          </div>
         </div>
       </main>
       

@@ -1,33 +1,64 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/context/AuthContext';
 import { User, Package, CreditCard, Heart, Home, LogOut } from 'lucide-react';
 
+// Profile form validation schema
+const profileFormSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+});
+
 const Profile = () => {
-  const { user, isAuthenticated, logout, profile } = useAuth();
+  const { user, isAuthenticated, logout, profile, userData, updateProfile, isLoading } = useAuth();
   const navigate = useNavigate();
-  
-  // Redirect to login if not authenticated
-  React.useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
-    }
-  }, [isAuthenticated, navigate]);
   
   const [activeTab, setActiveTab] = useState('account');
   
-  if (!isAuthenticated || !user || !profile) {
-    return null; // Will redirect to login page
-  }
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate, isLoading]);
   
-  const handleLogout = () => {
-    logout();
+  const profileForm = useForm<z.infer<typeof profileFormSchema>>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      name: profile?.name || '',
+    },
+    values: {
+      name: profile?.name || '',
+    }
+  });
+  
+  // Update form values when profile changes
+  useEffect(() => {
+    if (profile) {
+      profileForm.reset({
+        name: profile.name || '',
+      });
+    }
+  }, [profile, profileForm]);
+  
+  const handleLogout = async () => {
+    await logout();
     navigate('/');
+  };
+  
+  const handleProfileSubmit = async (values: z.infer<typeof profileFormSchema>) => {
+    await updateProfile({
+      name: values.name,
+    });
   };
   
   // Format price to currency
@@ -37,7 +68,23 @@ const Profile = () => {
       currency: 'USD',
     }).format(price);
   };
+  
+  if (isLoading) {
+    return (
+      <>
+        <Header />
+        <main className="luxury-container py-12 min-h-screen">
+          <div className="text-center py-16">Loading...</div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
+  if (!isAuthenticated || !user || !profile) {
+    return null; // Will redirect to login page
+  }
+  
   return (
     <>
       <Header />
@@ -102,89 +149,63 @@ const Profile = () => {
                 <h2 className="text-xl font-medium">Account Information</h2>
                 
                 <div className="flex items-center gap-4 mb-8">
-                  <div className="w-20 h-20 rounded-full bg-muted overflow-hidden">
-                    <img 
-                      src={user.avatar || '/placeholder.svg'} 
-                      alt={user.name} 
-                      className="w-full h-full object-cover"
+                  <Avatar className="w-20 h-20">
+                    <AvatarImage 
+                      src={profile.avatar || '/placeholder.svg'} 
+                      alt={profile.name} 
                     />
-                  </div>
+                    <AvatarFallback>{profile.name?.charAt(0) || user.email?.charAt(0)}</AvatarFallback>
+                  </Avatar>
                   <div>
-                    <h3 className="font-medium">{user.name}</h3>
-                    <p className="text-sm text-muted-foreground">{user.email}</p>
+                    <h3 className="font-medium">{profile.name}</h3>
+                    <p className="text-sm text-muted-foreground">{profile.email}</p>
                   </div>
                 </div>
                 
-                <form className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium mb-2">
-                        Name
-                      </label>
-                      <input
-                        id="name"
-                        type="text"
-                        defaultValue={user.name}
-                        className="w-full p-3 border border-border focus:border-luxury outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium mb-2">
-                        Email
-                      </label>
-                      <input
-                        id="email"
-                        type="email"
-                        defaultValue={user.email}
-                        className="w-full p-3 border border-border focus:border-luxury outline-none"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="current-password" className="block text-sm font-medium mb-2">
-                      Current Password
-                    </label>
-                    <input
-                      id="current-password"
-                      type="password"
-                      className="w-full p-3 border border-border focus:border-luxury outline-none"
+                <Form {...profileForm}>
+                  <form onSubmit={profileForm.handleSubmit(handleProfileSubmit)} className="space-y-6">
+                    <FormField
+                      control={profileForm.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="block text-sm font-medium mb-2">Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              className="w-full p-3 border border-border focus:border-luxury outline-none"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
                     <div>
-                      <label htmlFor="new-password" className="block text-sm font-medium mb-2">
-                        New Password
-                      </label>
-                      <input
-                        id="new-password"
-                        type="password"
-                        className="w-full p-3 border border-border focus:border-luxury outline-none"
+                      <FormLabel className="block text-sm font-medium mb-2">Email</FormLabel>
+                      <Input
+                        type="email"
+                        value={profile.email}
+                        readOnly
+                        className="w-full p-3 border border-border bg-muted outline-none"
                       />
+                      <p className="text-xs text-muted-foreground mt-1">Email cannot be changed</p>
                     </div>
-                    <div>
-                      <label htmlFor="confirm-password" className="block text-sm font-medium mb-2">
-                        Confirm New Password
-                      </label>
-                      <input
-                        id="confirm-password"
-                        type="password"
-                        className="w-full p-3 border border-border focus:border-luxury outline-none"
-                      />
-                    </div>
-                  </div>
-                  
-                  <Button className="bg-luxury hover:bg-luxury-dark text-white">
-                    Save Changes
-                  </Button>
-                </form>
+                    
+                    <Button 
+                      type="submit"
+                      className="bg-luxury hover:bg-luxury-dark text-white"
+                    >
+                      Save Changes
+                    </Button>
+                  </form>
+                </Form>
               </TabsContent>
               
               <TabsContent value="orders" className="space-y-8 mt-0">
                 <h2 className="text-xl font-medium">Order History</h2>
                 
-                {profile.orders.length === 0 ? (
+                {userData?.orders.length === 0 ? (
                   <div className="text-center py-16">
                     <div className="inline-flex justify-center items-center w-16 h-16 bg-muted rounded-full">
                       <Package size={24} className="text-muted-foreground" />
@@ -202,7 +223,7 @@ const Profile = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {profile.orders.map((order) => (
+                    {userData?.orders.map((order) => (
                       <div key={order.id} className="border border-border rounded-md overflow-hidden">
                         <div className="bg-muted p-4 flex justify-between items-center">
                           <div>
@@ -256,7 +277,7 @@ const Profile = () => {
               <TabsContent value="addresses" className="space-y-8 mt-0">
                 <h2 className="text-xl font-medium">Addresses</h2>
                 
-                {profile.addresses.length === 0 ? (
+                {userData?.addresses.length === 0 ? (
                   <div className="text-center py-16">
                     <div className="inline-flex justify-center items-center w-16 h-16 bg-muted rounded-full">
                       <Home size={24} className="text-muted-foreground" />
@@ -273,7 +294,7 @@ const Profile = () => {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {profile.addresses.map((address, index) => (
+                    {userData?.addresses.map((address, index) => (
                       <div key={index} className="border border-border rounded-md p-4">
                         <div className="flex justify-between items-start">
                           <div>
@@ -323,7 +344,7 @@ const Profile = () => {
               <TabsContent value="wishlist" className="space-y-8 mt-0">
                 <h2 className="text-xl font-medium">Wishlist</h2>
                 
-                {profile.wishlist.length === 0 ? (
+                {userData?.wishlist.length === 0 ? (
                   <div className="text-center py-16">
                     <div className="inline-flex justify-center items-center w-16 h-16 bg-muted rounded-full">
                       <Heart size={24} className="text-muted-foreground" />

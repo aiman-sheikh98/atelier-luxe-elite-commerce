@@ -10,7 +10,7 @@ import { useCart } from '@/context/CartContext';
 import { getProductById } from '@/data/products';
 
 const Wishlist = () => {
-  const { isAuthenticated, profile, removeFromWishlist } = useAuth();
+  const { isAuthenticated, userData, removeFromWishlist, isLoading } = useAuth();
   const { addItem } = useCart();
   
   // Format price to currency
@@ -22,7 +22,7 @@ const Wishlist = () => {
   };
   
   // Get wishlist items with product details
-  const wishlistItems = profile?.wishlist.map(id => {
+  const wishlistItems = userData?.wishlist.map(id => {
     const product = getProductById(id);
     return product ? {
       id: product.id,
@@ -39,6 +39,18 @@ const Wishlist = () => {
       quantity: 1
     });
   };
+  
+  if (isLoading) {
+    return (
+      <>
+        <Header />
+        <main className="luxury-container py-12 min-h-screen">
+          <div className="text-center py-16">Loading...</div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>

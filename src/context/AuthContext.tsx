@@ -1,12 +1,16 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Session, User } from '@supabase/supabase-js';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
-export type User = {
+export type UserProfile = {
   id: string;
   name: string;
   email: string;
   avatar?: string;
+  created_at: string;
+  updated_at: string;
 };
 
 export type Order = {
@@ -31,8 +35,8 @@ type AddressType = {
   country: string;
 };
 
-type UserProfile = {
-  user: User | null;
+type UserData = {
+  profile: UserProfile | null;
   addresses: AddressType[];
   orders: Order[];
   wishlist: string[];
@@ -40,12 +44,14 @@ type UserProfile = {
 
 type AuthContextType = {
   user: User | null;
-  isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
-  register: (name: string, email: string, password: string) => Promise<void>;
   profile: UserProfile | null;
-  updateProfile: (data: Partial<UserProfile>) => void;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
+  userData: UserData | null;
+  updateProfile: (data: Partial<UserProfile>) => Promise<void>;
   addAddress: (address: AddressType) => void;
   removeAddress: (index: number) => void;
   addToWishlist: (productId: string) => void;
@@ -53,150 +59,180 @@ type AuthContextType = {
   checkInWishlist: (productId: string) => boolean;
 };
 
-// Mock users for demo
-const MOCK_USERS = [
-  {
-    id: '1',
-    name: 'Demo User',
-    email: 'demo@example.com',
-    password: 'password',
-    avatar: '/placeholder.svg',
-  }
-];
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   
-  // Check for saved user on mount
+  // Initialize auth state from Supabase
   useEffect(() => {
-    const savedUser = localStorage.getItem('luxe-user');
-    const savedProfile = localStorage.getItem('luxe-profile');
-    
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (error) {
-        console.error("Failed to parse user from localStorage", error);
-        localStorage.removeItem('luxe-user');
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, currentSession) => {
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
+        
+        // If session changes, we'll fetch the profile data
+        if (currentSession?.user) {
+          // Defer Supabase calls with setTimeout
+          setTimeout(() => {
+            fetchUserProfile(currentSession.user.id);
+          }, 0);
+        } else {
+          setProfile(null);
+          setUserData(null);
+        }
       }
-    }
-    
-    if (savedProfile) {
-      try {
-        setProfile(JSON.parse(savedProfile));
-      } catch (error) {
-        console.error("Failed to parse profile from localStorage", error);
-        localStorage.removeItem('luxe-profile');
-      }
-    }
-  }, []);
-  
-  // Save user to localStorage whenever it changes
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem('luxe-user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('luxe-user');
-    }
-  }, [user]);
-  
-  // Save profile to localStorage whenever it changes
-  useEffect(() => {
-    if (profile) {
-      localStorage.setItem('luxe-profile', JSON.stringify(profile));
-    } else {
-      localStorage.removeItem('luxe-profile');
-    }
-  }, [profile]);
-
-  const login = async (email: string, password: string) => {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const foundUser = MOCK_USERS.find(
-      u => u.email === email && u.password === password
     );
     
-    if (!foundUser) {
-      toast.error('Invalid credentials');
-      throw new Error('Invalid credentials');
-    }
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      setSession(currentSession);
+      setUser(currentSession?.user ?? null);
+      
+      if (currentSession?.user) {
+        fetchUserProfile(currentSession.user.id);
+      } else {
+        setIsLoading(false);
+      }
+    });
     
-    const { password: _, ...userWithoutPassword } = foundUser;
-    setUser(userWithoutPassword);
-    
-    // Initialize profile if not exists
-    if (!profile || profile.user?.id !== foundUser.id) {
-      setProfile({
-        user: userWithoutPassword,
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+  
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      // Get user profile from Supabase
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      
+      if (profileError) throw profileError;
+      
+      setProfile(profileData);
+      
+      // For now, we'll use empty arrays for these until we implement those tables
+      setUserData({
+        profile: profileData,
         addresses: [],
         orders: [],
-        wishlist: [],
+        wishlist: []
       });
+      
+    } catch (error: any) {
+      console.error('Error fetching user profile:', error);
+      toast.error('Failed to load user profile');
+    } finally {
+      setIsLoading(false);
     }
-    
-    toast.success('Successfully logged in');
   };
-
-  const logout = () => {
-    setUser(null);
-    toast.info('Logged out successfully');
+  
+  const login = async (email: string, password: string) => {
+    try {
+      setIsLoading(true);
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      
+      if (error) throw error;
+      
+      toast.success('Successfully logged in');
+    } catch (error: any) {
+      console.error('Login error:', error);
+      toast.error(error.message || 'Invalid credentials');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   };
-
+  
   const register = async (name: string, email: string, password: string) => {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Check if email already exists
-    if (MOCK_USERS.some(u => u.email === email)) {
-      toast.error('Email already in use');
-      throw new Error('Email already in use');
+    try {
+      setIsLoading(true);
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name
+          }
+        }
+      });
+      
+      if (error) throw error;
+      
+      toast.success('Account created successfully');
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      toast.error(error.message || 'Failed to create account');
+      throw error;
+    } finally {
+      setIsLoading(false);
     }
-    
-    // Generate a random user ID (would normally be done by the backend)
-    const newUser = {
-      id: Math.random().toString(36).substring(2, 9),
-      name,
-      email,
-      password,
-      avatar: '/placeholder.svg',
-    };
-    
-    // Add to mock users (in a real app, this would be a backend API call)
-    MOCK_USERS.push(newUser);
-    
-    const { password: _, ...userWithoutPassword } = newUser;
-    setUser(userWithoutPassword);
-    
-    // Initialize empty profile
-    setProfile({
-      user: userWithoutPassword,
-      addresses: [],
-      orders: [],
-      wishlist: [],
-    });
-    
-    toast.success('Account created successfully');
   };
   
-  const updateProfile = (data: Partial<UserProfile>) => {
-    if (!profile) return;
-    
-    setProfile(prev => {
-      if (!prev) return null;
-      return { ...prev, ...data };
-    });
-    
-    toast.success('Profile updated');
+  const logout = async () => {
+    try {
+      setIsLoading(true);
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) throw error;
+      
+      toast.info('Logged out successfully');
+    } catch (error: any) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
   
+  const updateProfile = async (data: Partial<UserProfile>) => {
+    try {
+      if (!user) return;
+      
+      const { error } = await supabase
+        .from('profiles')
+        .update(data)
+        .eq('id', user.id);
+      
+      if (error) throw error;
+      
+      // Update local state
+      setProfile(prev => {
+        if (!prev) return null;
+        return { ...prev, ...data };
+      });
+      
+      setUserData(prev => {
+        if (!prev) return null;
+        return { 
+          ...prev, 
+          profile: prev.profile ? { ...prev.profile, ...data } : null
+        };
+      });
+      
+      toast.success('Profile updated');
+    } catch (error: any) {
+      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile');
+    }
+  };
+  
+  // For now, these functions will work with local state only
+  // In a future update, we would store this data in Supabase tables
   const addAddress = (address: AddressType) => {
-    if (!profile) return;
+    if (!userData) return;
     
-    setProfile(prev => {
+    setUserData(prev => {
       if (!prev) return null;
       return { 
         ...prev, 
@@ -208,9 +244,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
   
   const removeAddress = (index: number) => {
-    if (!profile) return;
+    if (!userData) return;
     
-    setProfile(prev => {
+    setUserData(prev => {
       if (!prev) return null;
       
       const newAddresses = [...prev.addresses];
@@ -226,9 +262,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
   
   const addToWishlist = (productId: string) => {
-    if (!profile) return;
+    if (!userData) return;
     
-    setProfile(prev => {
+    setUserData(prev => {
       if (!prev) return null;
       if (prev.wishlist.includes(productId)) return prev;
       
@@ -242,9 +278,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
   
   const removeFromWishlist = (productId: string) => {
-    if (!profile) return;
+    if (!userData) return;
     
-    setProfile(prev => {
+    setUserData(prev => {
       if (!prev) return null;
       
       return { 
@@ -257,18 +293,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
   
   const checkInWishlist = (productId: string): boolean => {
-    if (!profile) return false;
-    return profile.wishlist.includes(productId);
+    if (!userData) return false;
+    return userData.wishlist.includes(productId);
   };
 
   return (
     <AuthContext.Provider value={{ 
       user, 
+      profile,
       isAuthenticated: !!user,
+      isLoading,
       login, 
       logout, 
       register,
-      profile,
+      userData,
       updateProfile,
       addAddress,
       removeAddress,

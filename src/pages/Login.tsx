@@ -38,7 +38,12 @@ const Login = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(redirectTo === 'checkout' ? '/checkout' : `/${redirectTo}`);
+      // Fix: Ensure redirectTo is properly formatted as a valid path
+      const redirectPath = redirectTo === 'checkout' ? '/checkout' : 
+                          (redirectTo.startsWith('/') ? redirectTo : `/${redirectTo}`);
+      
+      // Ensure we don't navigate to an empty or invalid path
+      navigate(redirectPath || '/');
     }
   }, [isAuthenticated, navigate, redirectTo]);
   

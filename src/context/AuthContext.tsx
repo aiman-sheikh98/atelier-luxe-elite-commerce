@@ -17,7 +17,7 @@ export type Order = {
   id: string;
   date: string;
   total: number;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered';
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   items: {
     id: string;
     name: string;
@@ -57,6 +57,8 @@ type AuthContextType = {
   addToWishlist: (productId: string) => void;
   removeFromWishlist: (productId: string) => void;
   checkInWishlist: (productId: string) => boolean;
+  cancelOrder: (orderId: string) => Promise<void>;
+  fetchOrders: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -119,11 +121,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       setProfile(profileData);
       
+      // Fetch orders for the user
+      const orders = await fetchUserOrders(userId);
+      
       // For now, we'll use empty arrays for these until we implement those tables
       setUserData({
         profile: profileData,
         addresses: [],
-        orders: [],
+        orders: orders,
         wishlist: []
       });
       
@@ -132,6 +137,56 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toast.error('Failed to load user profile');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchUserOrders = async (userId: string): Promise<Order[]> => {
+    try {
+      const { data: ordersData, error } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('Error fetching orders:', error);
+        return [];
+      }
+      
+      if (!ordersData || ordersData.length === 0) {
+        return [];
+      }
+      
+      // Transform orders data to match our Order type
+      return ordersData.map(order => ({
+        id: order.id,
+        date: order.created_at,
+        total: order.amount / 100, // Convert from cents to dollars
+        status: order.status,
+        items: order.items || []
+      }));
+    } catch (error) {
+      console.error('Error in fetchUserOrders:', error);
+      return [];
+    }
+  };
+
+  const fetchOrders = async () => {
+    if (!user) return;
+    
+    try {
+      const orders = await fetchUserOrders(user.id);
+      
+      setUserData(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          orders
+        };
+      });
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      toast.error('Failed to load orders');
     }
   };
   
@@ -227,6 +282,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
   
+  const cancelOrder = async (orderId: string) => {
+    try {
+      if (!user) return;
+      
+      const { error } = await supabase
+        .from('orders')
+        .update({ status: 'cancelled' })
+        .eq('id', orderId)
+        .eq('user_id', user.id);
+      
+      if (error) {
+        console.error('Error cancelling order:', error);
+        toast.error('Failed to cancel order');
+        return;
+      }
+      
+      // Update local state
+      setUserData(prev => {
+        if (!prev) return null;
+        
+        const updatedOrders = prev.orders.map(order => 
+          order.id === orderId ? { ...order, status: 'cancelled' } : order
+        );
+        
+        return {
+          ...prev,
+          orders: updatedOrders
+        };
+      });
+      
+      toast.success('Order cancelled successfully');
+    } catch (error) {
+      console.error('Error in cancelOrder:', error);
+      toast.error('Failed to cancel order');
+    }
+  };
+  
   // For now, these functions will work with local state only
   // In a future update, we would store this data in Supabase tables
   const addAddress = (address: AddressType) => {
@@ -313,6 +405,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       addToWishlist,
       removeFromWishlist,
       checkInWishlist,
+      cancelOrder,
+      fetchOrders,
     }}>
       {children}
     </AuthContext.Provider>

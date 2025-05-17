@@ -12,6 +12,16 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/context/AuthContext';
 import { User, Package, CreditCard, Heart, Home, LogOut } from 'lucide-react';
+import { 
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 // Profile form validation schema
 const profileFormSchema = z.object({
@@ -19,7 +29,7 @@ const profileFormSchema = z.object({
 });
 
 const Profile = () => {
-  const { user, isAuthenticated, logout, profile, userData, updateProfile, isLoading } = useAuth();
+  const { user, isAuthenticated, logout, profile, userData, updateProfile, isLoading, cancelOrder, fetchOrders } = useAuth();
   const navigate = useNavigate();
   
   const [activeTab, setActiveTab] = useState('account');
@@ -30,6 +40,13 @@ const Profile = () => {
       navigate('/login');
     }
   }, [isAuthenticated, navigate, isLoading]);
+  
+  // Fetch orders when the orders tab is selected
+  useEffect(() => {
+    if (activeTab === 'orders' && isAuthenticated) {
+      fetchOrders();
+    }
+  }, [activeTab, isAuthenticated, fetchOrders]);
   
   const profileForm = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
@@ -61,6 +78,10 @@ const Profile = () => {
     });
   };
   
+  const handleCancelOrder = async (orderId: string) => {
+    await cancelOrder(orderId);
+  };
+  
   // Format price to currency
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -68,6 +89,12 @@ const Profile = () => {
       currency: 'USD',
     }).format(price);
   };
+  
+  // Get cancelled orders
+  const cancelledOrders = userData?.orders.filter(order => order.status === 'cancelled') || [];
+  
+  // Get active orders (not cancelled)
+  const activeOrders = userData?.orders.filter(order => order.status !== 'cancelled') || [];
   
   if (isLoading) {
     return (
@@ -205,7 +232,7 @@ const Profile = () => {
               <TabsContent value="orders" className="space-y-8 mt-0">
                 <h2 className="text-xl font-medium">Order History</h2>
                 
-                {userData?.orders.length === 0 ? (
+                {activeOrders.length === 0 && cancelledOrders.length === 0 ? (
                   <div className="text-center py-16">
                     <div className="inline-flex justify-center items-center w-16 h-16 bg-muted rounded-full">
                       <Package size={24} className="text-muted-foreground" />
@@ -222,54 +249,91 @@ const Profile = () => {
                     </Button>
                   </div>
                 ) : (
-                  <div className="space-y-4">
-                    {userData?.orders.map((order) => (
-                      <div key={order.id} className="border border-border rounded-md overflow-hidden">
-                        <div className="bg-muted p-4 flex justify-between items-center">
-                          <div>
-                            <p className="text-sm text-muted-foreground">
-                              Order #{order.id}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              {new Date(order.date).toLocaleDateString()}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-medium">{formatPrice(order.total)}</p>
-                            <p className="text-sm uppercase text-luxury">
-                              {order.status}
-                            </p>
-                          </div>
-                        </div>
-                        
-                        <div className="p-4">
-                          <div className="space-y-4">
-                            {order.items.map((item) => (
-                              <div key={item.id} className="flex gap-4">
-                                <div className="w-16 h-16 bg-muted shrink-0">
-                                  <img 
-                                    src={item.image} 
-                                    alt={item.name} 
-                                    className="w-full h-full object-cover"
-                                  />
-                                </div>
-                                <div className="flex-1">
-                                  <h4 className="font-medium">{item.name}</h4>
-                                  <p className="text-sm text-muted-foreground">
-                                    Quantity: {item.quantity}
-                                  </p>
-                                </div>
-                                <div className="text-right">
-                                  <p className="font-medium">
-                                    {formatPrice(item.price * item.quantity)}
-                                  </p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                  <div className="space-y-8">
+                    {/* Active Orders */}
+                    {activeOrders.length > 0 && (
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>Active Orders</CardTitle>
+                          <CardDescription>Orders that are being processed or shipped</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Order ID</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Total</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead className="text-right">Actions</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {activeOrders.map((order) => (
+                                <TableRow key={order.id}>
+                                  <TableCell className="font-medium">#{order.id.substring(0, 8)}</TableCell>
+                                  <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
+                                  <TableCell>{formatPrice(order.total)}</TableCell>
+                                  <TableCell>
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                    </span>
+                                  </TableCell>
+                                  <TableCell className="text-right">
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm"
+                                      className="text-destructive border-destructive hover:bg-destructive/10"
+                                      onClick={() => handleCancelOrder(order.id)}
+                                    >
+                                      Cancel Order
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </CardContent>
+                      </Card>
+                    )}
+                    
+                    {/* Cancelled Orders */}
+                    {cancelledOrders.length > 0 && (
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>Cancelled Orders</CardTitle>
+                          <CardDescription>Orders that have been cancelled</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Order ID</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Total</TableHead>
+                                <TableHead>Status</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {cancelledOrders.map((order) => (
+                                <TableRow key={order.id}>
+                                  <TableCell className="font-medium">#{order.id.substring(0, 8)}</TableCell>
+                                  <TableCell>{new Date(order.date).toLocaleDateString()}</TableCell>
+                                  <TableCell>{formatPrice(order.total)}</TableCell>
+                                  <TableCell>
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                      Cancelled
+                                    </span>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </CardContent>
+                      </Card>
+                    )}
+                    
+                    {/* Order Details Modal (future implementation) */}
                   </div>
                 )}
               </TabsContent>

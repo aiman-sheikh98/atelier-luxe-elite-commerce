@@ -5,6 +5,7 @@ import type { Database } from './types';
 
 const SUPABASE_URL = "https://dipdgigmplhphlotxkbm.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpcGRnaWdtcGxocGhsb3R4a2JtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczMjkyMDIsImV4cCI6MjA2MjkwNTIwMn0.tnuS80JrUFdNWKWYeEuMIux7NzLl0kYY-jBIjGEbCbo";
+export const STRIPE_PUBLISHABLE_KEY = Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "pk_test_your_stripe_key";
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";

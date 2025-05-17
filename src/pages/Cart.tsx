@@ -1,18 +1,21 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Trash2, Minus, Plus, ShoppingBag } from 'lucide-react';
+import { Trash2, Minus, Plus, ShoppingBag, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useCart } from '@/context/CartContext';
 import { showOrderConfirmation } from '@/components/notification/OrderConfirmation';
 import { useAuth } from '@/context/AuthContext';
+import { createCheckoutSession } from '@/services/StripeService';
+import { toast } from 'sonner';
 
 const Cart = () => {
   const { items, removeItem, updateQuantity, clearCart, totalPrice } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = useState(false);
   
   // Format price to currency
   const formatPrice = (price: number) => {
@@ -22,23 +25,31 @@ const Cart = () => {
     }).format(price);
   };
   
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!isAuthenticated) {
       navigate('/login?redirect=checkout');
       return;
     }
     
-    // Generate random order number
-    const orderNumber = Math.random().toString(36).substring(2, 10).toUpperCase();
-    
-    // Clear cart
-    clearCart();
-    
-    // Show confirmation notification
-    showOrderConfirmation(orderNumber);
-    
-    // Navigate to order confirmation page
-    navigate(`/order-confirmation/${orderNumber}`);
+    try {
+      setIsProcessing(true);
+      
+      // Create Stripe checkout session
+      const result = await createCheckoutSession(items, totalPrice * 1.07); // Including tax
+      
+      if (!result || !result.url) {
+        toast.error("Failed to initiate checkout. Please try again.");
+        setIsProcessing(false);
+        return;
+      }
+      
+      // Redirect to Stripe checkout
+      window.location.href = result.url;
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("An error occurred during checkout. Please try again later.");
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -93,6 +104,7 @@ const Cart = () => {
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
                           className="w-6 h-8 flex items-center justify-center border-r border-border"
+                          disabled={isProcessing}
                         >
                           <Minus size={14} />
                         </button>
@@ -100,6 +112,7 @@ const Cart = () => {
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           className="w-6 h-8 flex items-center justify-center border-l border-border"
+                          disabled={isProcessing}
                         >
                           <Plus size={14} />
                         </button>
@@ -108,6 +121,7 @@ const Cart = () => {
                       <button 
                         onClick={() => removeItem(item.id)}
                         className="text-muted-foreground hover:text-destructive"
+                        disabled={isProcessing}
                       >
                         <Trash2 size={18} />
                       </button>
@@ -164,8 +178,16 @@ const Cart = () => {
                 <Button
                   onClick={handleCheckout}
                   className="w-full bg-luxury hover:bg-luxury-dark text-white py-6"
+                  disabled={isProcessing}
                 >
-                  Checkout
+                  {isProcessing ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>Checkout</>
+                  )}
                 </Button>
                 
                 <p className="text-xs text-center text-muted-foreground">

@@ -13,11 +13,13 @@ export type UserProfile = {
   updated_at: string;
 };
 
+export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+
 export type Order = {
   id: string;
   date: string;
   total: number;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  status: OrderStatus;
   items: {
     id: string;
     name: string;
@@ -140,6 +142,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Function to validate and convert order status to the expected type
+  const validateOrderStatus = (status: string): OrderStatus => {
+    const validStatuses: OrderStatus[] = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+    
+    if (validStatuses.includes(status as OrderStatus)) {
+      return status as OrderStatus;
+    }
+    
+    // Default to pending if the status is not recognized
+    return 'pending';
+  };
+
   const fetchUserOrders = async (userId: string): Promise<Order[]> => {
     try {
       const { data: ordersData, error } = await supabase
@@ -162,7 +176,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         id: order.id,
         date: order.created_at,
         total: order.amount / 100, // Convert from cents to dollars
-        status: order.status,
+        status: validateOrderStatus(order.status), // Ensure status is a valid OrderStatus
         items: order.items || []
       }));
     } catch (error) {
@@ -303,7 +317,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!prev) return null;
         
         const updatedOrders = prev.orders.map(order => 
-          order.id === orderId ? { ...order, status: 'cancelled' } : order
+          order.id === orderId ? { ...order, status: 'cancelled' as OrderStatus } : order
         );
         
         return {

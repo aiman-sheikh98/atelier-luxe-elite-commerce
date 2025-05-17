@@ -13,6 +13,7 @@ const OrderConfirmation = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const [isVerifying, setIsVerifying] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
+  const [notificationSent, setNotificationSent] = useState(false);
   const { clearCart } = useCart();
   const { addNotification } = useNotifications();
   const navigate = useNavigate();
@@ -33,13 +34,14 @@ const OrderConfirmation = () => {
         if (result?.success && result.payment_status) {
           setPaymentStatus(result.payment_status);
           
-          // If payment is successful, add notification
-          if (result.payment_status === 'paid') {
+          // If payment is successful and notification not yet sent, add notification
+          if (result.payment_status === 'paid' && !notificationSent) {
             addNotification({
               title: 'Order Confirmed',
               description: `Your order #${orderId.substring(0, 8)} has been confirmed and is being processed.`,
               type: 'order'
             });
+            setNotificationSent(true);
           }
         } else {
           console.error("Payment verification failed:", result?.error);
@@ -52,7 +54,7 @@ const OrderConfirmation = () => {
     };
     
     verifyPayment();
-  }, [orderId, clearCart, addNotification]);
+  }, [orderId, clearCart, addNotification, notificationSent]);
   
   // If no order ID is provided, redirect to home
   if (!orderId && !isVerifying) {

@@ -1,13 +1,26 @@
 
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ProductGrid from '@/components/product/ProductGrid';
 import { getProductsByCollection } from '@/data/products';
 
 const Collection = () => {
-  const { collectionType } = useParams<{ collectionType: 'featured' | 'new-arrivals' | 'bestsellers' }>();
+  const { collectionType } = useParams<{ collectionType: string }>();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Handle direct navigation to /featured, /new-arrivals, or /bestsellers routes
+    if (!collectionType) {
+      const pathSegments = window.location.pathname.split('/');
+      const directPath = pathSegments[pathSegments.length - 1];
+      
+      if (['featured', 'new-arrivals', 'bestsellers'].includes(directPath)) {
+        navigate(`/collection/${directPath}`, { replace: true });
+      }
+    }
+  }, [collectionType, navigate]);
   
   const getTitle = () => {
     switch (collectionType) {

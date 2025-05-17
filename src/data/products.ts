@@ -185,7 +185,7 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1598522140397-c94913554fb9?q=80&w=987&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=1060&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1598971639058-bb4741e9650b?q=80&w=976&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1582562124811-c09040d0a901?q=80&w=987&auto=format&fit=crop'
     ],
     bestseller: true
   },
@@ -207,7 +207,7 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1596783074918-c84cb06531ca?q=80&w=987&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=987&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1550639525-c97d455acf70?q=80&w=926&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1487252665478-49b61b47f302?q=80&w=987&auto=format&fit=crop'
     ],
     featured: true
   },
@@ -229,7 +229,7 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=1011&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1543076447-215ad9ba6923?q=80&w=1074&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?q=80&w=987&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1582562124811-c09040d0a901?q=80&w=987&auto=format&fit=crop'
     ],
     new: true
   },
@@ -252,7 +252,7 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=935&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?q=80&w=1036&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1036&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1582562124811-c09040d0a901?q=80&w=987&auto=format&fit=crop'
     ],
     featured: true
   },
@@ -273,7 +273,7 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1603252109303-2751441dd157?q=80&w=987&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1577538928305-3807c3993047?q=80&w=1170&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1541346183200-e8e117785358?q=80&w=1010&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1487252665478-49b61b47f302?q=80&w=987&auto=format&fit=crop'
     ],
     bestseller: true
   },
@@ -295,7 +295,7 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1590159983013-d4ff5fc71c1d?q=80&w=987&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1577900232427-18219b9166a0?q=80&w=987&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1595231776515-ddffb1f4eb73?q=80&w=987&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1487252665478-49b61b47f302?q=80&w=987&auto=format&fit=crop'
     ],
     new: true
   },
@@ -318,7 +318,7 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=687&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1608234808654-2a8875faa7fd?q=80&w=741&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1591369822096-ffd140ec948f?q=80&w=687&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1582562124811-c09040d0a901?q=80&w=987&auto=format&fit=crop'
     ],
     featured: true
   },
@@ -340,7 +340,7 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=662&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1560379099-543ab70a2275?q=80&w=387&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1502163140606-888448ae8cfe?q=80&w=987&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1487252665478-49b61b47f302?q=80&w=987&auto=format&fit=crop'
     ],
     new: true
   },
@@ -362,7 +362,7 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1623998021446-45cd9b269c95?q=80&w=1776&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?q=80&w=1770&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1526045612212-70caf35c14df?q=80&w=1770&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?q=80&w=1776&auto=format&fit=crop'
     ],
     bestseller: true
   },
@@ -384,7 +384,7 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1548171915-c39def818307?q=80&w=1770&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?q=80&w=1664&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?q=80&w=1794&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?q=80&w=1776&auto=format&fit=crop'
     ],
     featured: true
   },
@@ -406,9 +406,56 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?q=80&w=1974&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=1770&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1780&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?q=80&w=1776&auto=format&fit=crop'
     ],
     new: true
+  },
+  {
+    id: 'watch-004',
+    name: 'Diamond-Set Diving Watch',
+    category: 'watches',
+    price: 36900,
+    description: 'Professional diving watch with diamond-set bezel and luminescent markers.',
+    details: [
+      'Stainless steel and 18k gold case with 42mm diameter',
+      'Automatic movement with date function',
+      'Rotating bezel with 36 diamonds',
+      'Blue ceramic dial with luminescent hour markers',
+      'Water resistant to 300 meters',
+      'Oyster bracelet with secure folding clasp'
+    ],
+    colors: ['#0F2C4A', '#D4AF37'],
+    images: [
+      'https://images.unsplash.com/photo-1533139502658-0198f920d8e8?q=80&w=1742&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=1887&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?q=80&w=1776&auto=format&fit=crop'
+    ],
+    featured: true,
+    bestseller: true
+  },
+  {
+    id: 'watch-005',
+    name: 'Perpetual Calendar Moonphase',
+    category: 'watches',
+    price: 75800,
+    description: 'Sophisticated perpetual calendar watch with moonphase display and annual calendar.',
+    details: [
+      '18k white gold case with 40mm diameter',
+      'Self-winding mechanical movement',
+      'Perpetual calendar with day, date, month, and leap year displays',
+      'Moonphase indicator at 6 o\'clock',
+      'Sapphire crystal case back',
+      'Hand-stitched alligator strap',
+      'Power reserve: 48 hours'
+    ],
+    colors: ['#FFFFFF', '#21201F'],
+    images: [
+      'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?q=80&w=1827&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1524805444758-089113d48a6d?q=80&w=1888&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?q=80&w=1776&auto=format&fit=crop'
+    ],
+    new: true,
+    featured: true
   },
   {
     id: 'perfume-001',
@@ -475,6 +522,52 @@ export const products: Product[] = [
       'https://images.unsplash.com/photo-1563170352-ba53a018aaf0?q=80&w=1769&auto=format&fit=crop'
     ],
     new: true
+  },
+  {
+    id: 'perfume-004',
+    name: 'Velvet Midnight Saffron',
+    category: 'perfumes',
+    price: 580,
+    description: 'An opulent blend of precious saffron and rich vanilla, creating a sensual and mysterious aura.',
+    details: [
+      '100ml eau de parfum',
+      'Top notes: saffron, black pepper',
+      'Middle notes: rose absolute, cedarwood',
+      'Base notes: vanilla, amber, leather',
+      'Limited edition crystal bottle',
+      'Handcrafted in small batches'
+    ],
+    colors: [],
+    images: [
+      'https://images.unsplash.com/photo-1610461888750-10bfc601b874?q=80&w=1887&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1616949755610-8c9bbc06f14b?q=80&w=1887&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1617129724087-43c74524a775?q=80&w=1887&auto=format&fit=crop'
+    ],
+    featured: true,
+    bestseller: true
+  },
+  {
+    id: 'perfume-005',
+    name: 'Private Collection Oud & Sandalwood',
+    category: 'perfumes',
+    price: 750,
+    description: 'An exclusive fragrance combining rare oud and creamy sandalwood for a sophisticated signature scent.',
+    details: [
+      '75ml eau de parfum',
+      'Top notes: cardamom, bergamot',
+      'Middle notes: oud wood, papyrus',
+      'Base notes: sandalwood, ambergris, musk',
+      'Hand-blown glass bottle with 24k gold accents',
+      'Presented in a handcrafted wooden box'
+    ],
+    colors: [],
+    images: [
+      'https://images.unsplash.com/photo-1622618991746-fe6004db3a47?q=80&w=1887&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1594149435368-b2d2d9602dd4?q=80&w=1887&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1608528577891-eb055944f2e7?q=80&w=1974&auto=format&fit=crop'
+    ],
+    new: true,
+    featured: true
   }
 ];
 

@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { toast } from 'sonner';
@@ -154,6 +153,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return 'pending';
   };
 
+  // Function to safely process and validate order items
+  const processOrderItems = (rawItems: any): Order['items'] => {
+    // If rawItems is already an array of objects with the required fields, use it
+    if (Array.isArray(rawItems) && 
+        rawItems.length > 0 && 
+        typeof rawItems[0] === 'object' &&
+        'id' in rawItems[0] && 
+        'name' in rawItems[0] && 
+        'quantity' in rawItems[0] && 
+        'price' in rawItems[0] &&
+        'image' in rawItems[0]) {
+      return rawItems;
+    }
+    
+    // If no valid items data, return empty array
+    return [];
+  };
+
   const fetchUserOrders = async (userId: string): Promise<Order[]> => {
     try {
       const { data: ordersData, error } = await supabase
@@ -177,7 +194,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         date: order.created_at,
         total: order.amount / 100, // Convert from cents to dollars
         status: validateOrderStatus(order.status), // Ensure status is a valid OrderStatus
-        items: order.items || []
+        items: processOrderItems(order.items) // Process and validate items
       }));
     } catch (error) {
       console.error('Error in fetchUserOrders:', error);

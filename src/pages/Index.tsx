@@ -32,6 +32,16 @@ const Index = () => {
     image: 'https://images.unsplash.com/photo-1598522140397-c94913554fb9?q=80&w=987&auto=format&fit=crop',
     path: '/category/clothing',
     description: 'Timeless garments with exceptional craftsmanship.'
+  }, {
+    name: 'Watches',
+    image: 'https://images.unsplash.com/photo-1623998021446-45cd9b269c95?q=80&w=1776&auto=format&fit=crop',
+    path: '/category/watches',
+    description: 'Masterpieces of precision and artistry.'
+  }, {
+    name: 'Perfumes',
+    image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=1780&auto=format&fit=crop',
+    path: '/category/perfumes',
+    description: 'Exquisite fragrances for the discerning individual.'
   }];
   
   return <>
@@ -68,7 +78,7 @@ const Index = () => {
           <div className="w-20 h-0.5 bg-luxury mx-auto mt-4"></div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((category, index) => <Link key={category.name} to={category.path} className="group relative overflow-hidden block">
               <div className="aspect-[4/3] bg-muted">
                 <img src={category.image} alt={category.name} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
@@ -92,7 +102,7 @@ const Index = () => {
           
           <div className="mt-12 text-center">
             <Button asChild variant="outline" className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8">
-              <Link to="/new-arrivals">View All New Arrivals</Link>
+              <Link to="/collection/new-arrivals">View All New Arrivals</Link>
             </Button>
           </div>
         </div>
@@ -104,7 +114,7 @@ const Index = () => {
         
         <div className="mt-12 text-center">
           <Button asChild variant="outline" className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8">
-              <Link to="/category/featured">View All Featured</Link>
+              <Link to="/collection/featured">View All Featured</Link>
           </Button>
         </div>
       </section>
@@ -138,7 +148,7 @@ const Index = () => {
         
         <div className="mt-12 text-center">
           <Button asChild variant="outline" className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8">
-            <Link to="/bestsellers">View All Bestsellers</Link>
+            <Link to="/collection/bestsellers">View All Bestsellers</Link>
           </Button>
         </div>
       </section>

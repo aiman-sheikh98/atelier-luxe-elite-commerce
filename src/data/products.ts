@@ -1,7 +1,7 @@
 export type Product = {
   id: string;
   name: string;
-  category: 'bags' | 'wallets' | 'sneakers' | 'clothing';
+  category: 'bags' | 'wallets' | 'sneakers' | 'clothing' | 'watches' | 'perfumes';
   price: number;
   description: string;
   details: string[];
@@ -31,7 +31,7 @@ export const products: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1035&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=987&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1169&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1601388362337-3961ea712be4?q=80&w=987&auto=format&fit=crop'
     ],
     featured: true,
     bestseller: true
@@ -343,6 +343,138 @@ export const products: Product[] = [
       'https://images.unsplash.com/photo-1502163140606-888448ae8cfe?q=80&w=987&auto=format&fit=crop'
     ],
     new: true
+  },
+  {
+    id: 'watch-001',
+    name: 'Platinum Chronograph Watch',
+    category: 'watches',
+    price: 28500,
+    description: 'Premium automatic chronograph watch with platinum case and sapphire crystal.',
+    details: [
+      'Platinum case with 40mm diameter',
+      'Swiss automatic movement',
+      'Sapphire crystal with anti-reflective coating',
+      'Water resistant to 100 meters',
+      'Alligator leather strap with deployment clasp',
+      'Power reserve: 60 hours'
+    ],
+    colors: ['#21201F', '#0F2C4A', '#5B432E'],
+    images: [
+      'https://images.unsplash.com/photo-1623998021446-45cd9b269c95?q=80&w=1776&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?q=80&w=1770&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1526045612212-70caf35c14df?q=80&w=1770&auto=format&fit=crop'
+    ],
+    bestseller: true
+  },
+  {
+    id: 'watch-002',
+    name: 'Rose Gold Skeleton Watch',
+    category: 'watches',
+    price: 19750,
+    description: 'Exquisite rose gold skeleton watch showcasing intricate mechanical craftsmanship.',
+    details: [
+      '18k rose gold case',
+      'Manual-winding mechanical movement',
+      'Skeleton dial revealing movement components',
+      'Sapphire crystal on front and back',
+      'Genuine alligator strap',
+      '60-hour power reserve'
+    ],
+    colors: ['#B76E79', '#21201F'],
+    images: [
+      'https://images.unsplash.com/photo-1548171915-c39def818307?q=80&w=1770&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?q=80&w=1664&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?q=80&w=1794&auto=format&fit=crop'
+    ],
+    featured: true
+  },
+  {
+    id: 'watch-003',
+    name: 'Limited Edition Tourbillon',
+    category: 'watches',
+    price: 95000,
+    description: 'Limited edition tourbillon masterpiece with hand-finished movement.',
+    details: [
+      'Platinum 950 case with 41mm diameter',
+      'Hand-finished mechanical movement with tourbillon',
+      'Limited to 50 pieces worldwide',
+      'Power reserve indicator',
+      'Hand-stitched alligator strap',
+      '72-hour power reserve'
+    ],
+    colors: ['#21201F', '#424242'],
+    images: [
+      'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?q=80&w=1974&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=1770&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1780&auto=format&fit=crop'
+    ],
+    new: true
+  },
+  {
+    id: 'perfume-001',
+    name: 'Signature Amber Oud',
+    category: 'perfumes',
+    price: 390,
+    description: 'Opulent amber and oud fragrance with notes of precious woods and spices.',
+    details: [
+      '100ml eau de parfum',
+      'Top notes: bergamot, pink pepper',
+      'Middle notes: rose, cinnamon',
+      'Base notes: amber, oud, vanilla',
+      'Handcrafted in France',
+      'Concentration: 25%'
+    ],
+    colors: [],
+    images: [
+      'https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=1780&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1592945403407-9546f1ad764c?q=80&w=1780&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1608528577891-eb055944f2e7?q=80&w=1974&auto=format&fit=crop'
+    ],
+    bestseller: true
+  },
+  {
+    id: 'perfume-002',
+    name: 'Exclusive Rose Collection',
+    category: 'perfumes',
+    price: 450,
+    description: 'Exquisite rose fragrance crafted with the rarest flowers from around the world.',
+    details: [
+      '75ml eau de parfum',
+      'Top notes: Bulgarian rose, mandarin',
+      'Middle notes: Damascus rose, jasmine',
+      'Base notes: patchouli, white musk',
+      'Limited annual production',
+      'Artisanal French glassware'
+    ],
+    colors: [],
+    images: [
+      'https://images.unsplash.com/photo-1615412704911-55d589229864?q=80&w=1780&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1601295452898-78a8dd904ab3?q=80&w=1887&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=1648&auto=format&fit=crop'
+    ],
+    featured: true
+  },
+  {
+    id: 'perfume-003',
+    name: 'Precious Iris & Vetiver',
+    category: 'perfumes',
+    price: 320,
+    description: 'A sophisticated blend of noble iris and earthy vetiver for the discerning connoisseur.',
+    details: [
+      '100ml eau de parfum',
+      'Top notes: bergamot, ginger',
+      'Middle notes: iris, violet',
+      'Base notes: vetiver, cedarwood',
+      'Created by master perfumer',
+      'Crystal flacon with gold accents'
+    ],
+    colors: [],
+    images: [
+      'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?q=80&w=1974&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1608529716866-68988a8d7c09?q=80&w=1976&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1563170352-ba53a018aaf0?q=80&w=1769&auto=format&fit=crop'
+    ],
+    new: true
   }
 ];
 
@@ -353,3 +485,15 @@ export const getProductsByCategory = (category: Product['category']) =>
   products.filter(p => p.category === category);
 export const getProductById = (id: string) => 
   products.find(p => p.id === id);
+export const getProductsByCollection = (collection: 'featured' | 'new' | 'bestseller') => {
+  switch (collection) {
+    case 'featured':
+      return getFeaturedProducts();
+    case 'new':
+      return getNewArrivals();
+    case 'bestseller':
+      return getBestsellers();
+    default:
+      return [];
+  }
+};

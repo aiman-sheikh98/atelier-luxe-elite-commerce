@@ -15,9 +15,8 @@ serve(async (req) => {
   }
 
   try {
-    // Extract session ID from request parameters
-    const url = new URL(req.url);
-    const sessionId = url.searchParams.get("session_id");
+    // Extract session ID from request body instead of URL parameters
+    const { session_id: sessionId } = await req.json();
     
     if (!sessionId) {
       throw new Error("No session ID provided");

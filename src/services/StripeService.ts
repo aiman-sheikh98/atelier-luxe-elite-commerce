@@ -37,7 +37,7 @@ export const createCheckoutSession = async (
 export const verifyPaymentSession = async (sessionId: string) => {
   try {
     const { data, error } = await supabase.functions.invoke('verify-payment', {
-      queryParams: { session_id: sessionId }
+      body: { session_id: sessionId } // Fixed: changed queryParams to body
     });
 
     if (error) {

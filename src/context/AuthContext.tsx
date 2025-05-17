@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { toast } from 'sonner';
@@ -12,7 +13,7 @@ export type UserProfile = {
   updated_at: string;
 };
 
-export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'paid';
 
 export type Order = {
   id: string;
@@ -143,7 +144,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Function to validate and convert order status to the expected type
   const validateOrderStatus = (status: string): OrderStatus => {
-    const validStatuses: OrderStatus[] = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+    const validStatuses: OrderStatus[] = ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'paid'];
     
     if (validStatuses.includes(status as OrderStatus)) {
       return status as OrderStatus;
@@ -342,6 +343,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           orders: updatedOrders
         };
       });
+      
+      // Import and use the notification system - using require to avoid circular dependencies
+      try {
+        const { useNotifications } = require('@/context/NotificationContext');
+        const { addNotification } = useNotifications();
+        
+        addNotification({
+          title: 'Order Cancelled',
+          description: `Your order #${orderId.substring(0, 8)} has been cancelled successfully.`,
+          type: 'order'
+        });
+      } catch (error) {
+        console.error('Could not send notification:', error);
+      }
       
       toast.success('Order cancelled successfully');
     } catch (error) {

@@ -68,6 +68,22 @@ serve(async (req) => {
       if (updateError) {
         console.error("Error updating order status:", updateError);
       }
+      
+      // If payment is successful, send a notification via the database
+      if (status === "paid" && orders[0].user_id) {
+        try {
+          // Add order confirmation notification to the notifications table
+          await serviceClient.from("notifications").insert({
+            user_id: orders[0].user_id,
+            title: "Order Confirmed",
+            description: `Your order #${orders[0].id.substring(0, 8)} has been confirmed and is being processed.`,
+            type: "order",
+            read: false
+          });
+        } catch (notificationError) {
+          console.error("Error creating notification:", notificationError);
+        }
+      }
     }
 
     return new Response(JSON.stringify({ 

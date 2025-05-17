@@ -7,12 +7,14 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { verifyPaymentSession } from '@/services/StripeService';
 import { useCart } from '@/context/CartContext';
+import { useNotifications } from '@/context/NotificationContext';
 
 const OrderConfirmation = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const [isVerifying, setIsVerifying] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const { clearCart } = useCart();
+  const { addNotification } = useNotifications();
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -30,6 +32,15 @@ const OrderConfirmation = () => {
         
         if (result?.success && result.payment_status) {
           setPaymentStatus(result.payment_status);
+          
+          // If payment is successful, add notification
+          if (result.payment_status === 'paid') {
+            addNotification({
+              title: 'Order Confirmed',
+              description: `Your order #${orderId.substring(0, 8)} has been confirmed and is being processed.`,
+              type: 'order'
+            });
+          }
         } else {
           console.error("Payment verification failed:", result?.error);
         }
@@ -41,7 +52,7 @@ const OrderConfirmation = () => {
     };
     
     verifyPayment();
-  }, [orderId, clearCart]);
+  }, [orderId, clearCart, addNotification]);
   
   // If no order ID is provided, redirect to home
   if (!orderId && !isVerifying) {

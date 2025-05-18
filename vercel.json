@@ -1,0 +1,18 @@
+
+{
+  "routes": [
+    { "src": "/order-confirmation/.*", "dest": "/" },
+    { "src": "/profile", "dest": "/" },
+    { "src": "/cart", "dest": "/" },
+    { "src": "/login", "dest": "/" },
+    { "src": "/wishlist", "dest": "/" },
+    { "src": "/product/.*", "dest": "/" },
+    { "src": "/category/.*", "dest": "/" },
+    { "src": "/collection/.*", "dest": "/" },
+    { "src": "/fashion-shows", "dest": "/" },
+    { "src": "/featured", "dest": "/" },
+    { "src": "/new-arrivals", "dest": "/" },
+    { "src": "/bestsellers", "dest": "/" },
+    { "src": "/(.*)", "dest": "/" }
+  ]
+}

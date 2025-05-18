@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
@@ -29,12 +28,12 @@ const Index = () => {
     description: 'Where comfort meets uncompromising style.'
   }, {
     name: 'Clothing',
-    image: 'https://images.unsplash.com/photo-1598522140397-c94913554fb9?q=80&w=987&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=1011&auto=format&fit=crop',
     path: '/category/clothing',
     description: 'Timeless garments with exceptional craftsmanship.'
   }, {
     name: 'Watches',
-    image: 'https://images.unsplash.com/photo-1623998021446-45cd9b269c95?q=80&w=1776&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1533139502658-0198f920d8e8?q=80&w=1742&auto=format&fit=crop',
     path: '/category/watches',
     description: 'Masterpieces of precision and artistry.'
   }, {
@@ -98,7 +97,15 @@ const Index = () => {
       {/* New Arrivals Section */}
       <section className="bg-muted py-24">
         <div className="luxury-container">
-          <ProductGrid products={newArrivals} title="New Arrivals" />
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-serif">New Arrivals</h2>
+            <div className="w-20 h-0.5 bg-luxury mx-auto mt-4"></div>
+            <p className="mt-4 text-muted-foreground text-center max-w-2xl mx-auto">
+              The latest additions to our collection, representing the pinnacle of contemporary luxury.
+            </p>
+          </div>
+          
+          <ProductGrid products={newArrivals} />
           
           <div className="mt-12 text-center">
             <Button asChild variant="outline" className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8">
@@ -110,7 +117,15 @@ const Index = () => {
       
       {/* Featured Products Section */}
       <section className="luxury-container py-24">
-        <ProductGrid products={featuredProducts} title="Featured Products" />
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-serif">Featured Products</h2>
+          <div className="w-20 h-0.5 bg-luxury mx-auto mt-4"></div>
+          <p className="mt-4 text-muted-foreground text-center max-w-2xl mx-auto">
+            Our curated selection of exceptional products, chosen for their outstanding craftsmanship and design.
+          </p>
+        </div>
+        
+        <ProductGrid products={featuredProducts} />
         
         <div className="mt-12 text-center">
           <Button asChild variant="outline" className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8">
@@ -136,7 +151,7 @@ const Index = () => {
               </Button>
             </div>
             <div className="relative">
-              <img alt="Artisan craftsmanship" className="w-full h-auto" src="https://in.louisvuitton.com/content/dam/lv/online/high-end/wolv/art-et-culture/espaces-lv/U_AC_Espace_Louis_Vuitton_Venezia_V2.html/jcr:content/assets/caroussel/desktop/1_ESPACE_LV_VENEZIA_5925_LVCOM_2048x1152.jpg?imwidth=4096" />
+              <img alt="Artisan craftsmanship" className="w-full h-auto" src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=2070&auto=format&fit=crop" />
             </div>
           </div>
         </div>
@@ -144,7 +159,15 @@ const Index = () => {
       
       {/* Bestsellers Section */}
       <section className="luxury-container py-24">
-        <ProductGrid products={bestsellers} title="Bestsellers" />
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-serif">Bestsellers</h2>
+          <div className="w-20 h-0.5 bg-luxury mx-auto mt-4"></div>
+          <p className="mt-4 text-muted-foreground text-center max-w-2xl mx-auto">
+            Our most coveted items, cherished by discerning customers worldwide for their timeless appeal.
+          </p>
+        </div>
+        
+        <ProductGrid products={bestsellers} />
         
         <div className="mt-12 text-center">
           <Button asChild variant="outline" className="border-luxury text-luxury hover:bg-luxury hover:text-white rounded-none px-8">

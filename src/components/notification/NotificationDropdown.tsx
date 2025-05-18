@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BellDot, Bell, Check, X } from 'lucide-react';
+import { BellDot, Bell, Check, X, AlertCircle, ShoppingBag, Megaphone } from 'lucide-react';
 import { useNotifications, NotificationType } from '@/context/NotificationContext';
 import {
   DropdownMenu,
@@ -43,8 +43,19 @@ const NotificationItem: React.FC<{ notification: NotificationType; onRead: () =>
   const getTypeColor = () => {
     switch (type) {
       case 'order': return 'text-green-600';
+      case 'cancelled': return 'text-red-600';
       case 'promotion': return 'text-luxury';
       default: return 'text-blue-600';
+    }
+  };
+  
+  // Icon based on notification type
+  const getTypeIcon = () => {
+    switch (type) {
+      case 'order': return <ShoppingBag size={14} className="text-green-600" />;
+      case 'cancelled': return <AlertCircle size={14} className="text-red-600" />;
+      case 'promotion': return <Megaphone size={14} className="text-luxury" />;
+      default: return <Bell size={14} className="text-blue-600" />;
     }
   };
 
@@ -53,11 +64,12 @@ const NotificationItem: React.FC<{ notification: NotificationType; onRead: () =>
       <div className="flex justify-between items-start">
         <div className="flex-1">
           <div className="flex items-center gap-2">
+            {getTypeIcon()}
             <h4 className="text-sm font-medium">{title}</h4>
             {!read && <span className="h-2 w-2 rounded-full bg-luxury"></span>}
           </div>
           <p className="text-xs text-muted-foreground mt-1">{description}</p>
-          <p className={`text-xs ${getTypeColor()} mt-2`}>
+          <p className={`text-xs ${getTypeColor()} mt-2 flex items-center gap-1`}>
             {formatRelativeTime(date)}
           </p>
         </div>

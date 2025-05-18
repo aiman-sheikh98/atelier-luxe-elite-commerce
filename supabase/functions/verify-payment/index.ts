@@ -19,7 +19,7 @@ serve(async (req) => {
 
   try {
     // Extract session ID from request body instead of URL parameters
-    const { session_id: sessionId } = await req.json();
+    const { session_id: sessionId, status: requestedStatus } = await req.json();
     
     if (!sessionId) {
       throw new Error("No session ID provided");
@@ -48,7 +48,7 @@ serve(async (req) => {
       }
     );
 
-    // Find and update the order with the session results
+    // Find the order with the session results
     const { data: orders, error: findError } = await serviceClient
       .from("orders")
       .select("*")
@@ -59,11 +59,16 @@ serve(async (req) => {
       console.error("Error finding order:", findError);
     }
 
-    // If order exists, set status to "paid" regardless of session.payment_status
-    // This is to ensure the payment status is always shown as "paid" for completed orders
+    // Set status based on request or default to "paid" for completed orders
+    let status = requestedStatus || "paid";
+    let notificationType = status === "cancelled" ? "cancelled" : "order";
+    let notificationTitle = status === "cancelled" ? "Order Cancelled" : "Order Confirmed";
+    let notificationDesc = status === "cancelled" 
+      ? `Your order #${orders?.[0]?.id?.substring(0, 8)} has been cancelled.`
+      : `Your order #${orders?.[0]?.id?.substring(0, 8)} has been confirmed and is being processed.`;
+    
+    // If order exists, update status
     if (orders && orders.length > 0) {
-      const status = "paid"; // Always set to paid for completed orders
-      
       const { error: updateError } = await serviceClient
         .from("orders")
         .update({ status })
@@ -73,22 +78,25 @@ serve(async (req) => {
         console.error("Error updating order status:", updateError);
       }
       
+      // Generate a unique notification key to track in the processed set
+      const notificationKey = `${sessionId}-${status}`;
+      
       // Send a notification via the database - only if not processed before
-      if (orders[0].user_id && !processedSessions.has(sessionId)) {
+      if (orders[0].user_id && !processedSessions.has(notificationKey)) {
         try {
-          // Add order confirmation notification to the notifications table
+          // Add notification to the notifications table
           await serviceClient.from("notifications").insert({
             user_id: orders[0].user_id,
-            title: "Order Confirmed",
-            description: `Your order #${orders[0].id.substring(0, 8)} has been confirmed and is being processed.`,
-            type: "order",
+            title: notificationTitle,
+            description: notificationDesc,
+            type: notificationType,
             read: false
           });
           
-          // Mark this session as processed
-          processedSessions.add(sessionId);
+          // Mark this notification as processed
+          processedSessions.add(notificationKey);
           
-          console.log(`Notification created for order ${orders[0].id}`);
+          console.log(`${notificationTitle} notification created for order ${orders[0].id}`);
         } catch (notificationError) {
           console.error("Error creating notification:", notificationError);
         }
@@ -97,7 +105,7 @@ serve(async (req) => {
 
     return new Response(JSON.stringify({ 
       success: true,
-      payment_status: "paid", // Always return paid status
+      payment_status: status,
       session 
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

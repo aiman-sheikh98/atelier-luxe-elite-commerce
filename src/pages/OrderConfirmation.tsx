@@ -7,7 +7,6 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { verifyPaymentSession } from '@/services/StripeService';
 import { useCart } from '@/context/CartContext';
-import { useNotifications } from '@/context/NotificationContext';
 import { showOrderConfirmation } from '@/components/notification/OrderConfirmation';
 
 const OrderConfirmation = () => {
@@ -52,6 +51,30 @@ const OrderConfirmation = () => {
     
     verifyPayment();
   }, [orderId, clearCart, notificationSent]);
+  
+  // Handle order cancellation
+  const handleCancelOrder = async () => {
+    if (!orderId) return;
+    
+    try {
+      setIsVerifying(true);
+      
+      // Call the verify-payment function with cancelled status
+      const result = await verifyPaymentSession(orderId, 'cancelled');
+      
+      if (result?.success) {
+        // Show cancellation notification
+        showOrderConfirmation(orderId.substring(0, 8), 'cancelled');
+        setPaymentStatus('cancelled');
+      } else {
+        console.error("Order cancellation failed:", result?.error);
+      }
+    } catch (error) {
+      console.error("Error cancelling order:", error);
+    } finally {
+      setIsVerifying(false);
+    }
+  };
   
   // If no order ID is provided, redirect to home
   if (!orderId && !isVerifying) {
@@ -107,6 +130,17 @@ const OrderConfirmation = () => {
               >
                 <Link to="/profile">View Order Details</Link>
               </Button>
+              
+              {paymentStatus !== 'cancelled' && (
+                <Button 
+                  variant="outline" 
+                  className="text-red-600 border-red-200 hover:bg-red-50"
+                  onClick={handleCancelOrder}
+                  disabled={isVerifying}
+                >
+                  Cancel Order
+                </Button>
+              )}
               
               <Button 
                 asChild

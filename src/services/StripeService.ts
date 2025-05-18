@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { CartItem } from '@/context/CartContext';
@@ -34,10 +33,10 @@ export const createCheckoutSession = async (
   }
 };
 
-export const verifyPaymentSession = async (sessionId: string) => {
+export const verifyPaymentSession = async (sessionId: string, status?: string) => {
   try {
     const { data, error } = await supabase.functions.invoke('verify-payment', {
-      body: { session_id: sessionId } // Fixed: changed queryParams to body
+      body: { session_id: sessionId, status },
     });
 
     if (error) {
@@ -47,7 +46,7 @@ export const verifyPaymentSession = async (sessionId: string) => {
 
     return data;
   } catch (error) {
-    console.error('Error in verifyPaymentSession:', error);
+    console.error('Exception verifying payment:', error);
     return { success: false, error };
   }
 };

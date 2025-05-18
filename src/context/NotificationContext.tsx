@@ -8,7 +8,7 @@ export type NotificationType = {
   description: string;
   read: boolean;
   date: Date;
-  type: 'order' | 'system' | 'promotion';
+  type: 'order' | 'system' | 'promotion' | 'cancelled';
 };
 
 type NotificationContextType = {
@@ -38,8 +38,11 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   // Add a notification
   const addNotification = (notification: Omit<NotificationType, 'id' | 'date' | 'read'>) => {
+    // Generate a unique ID for the notification
+    const notificationId = `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    
     const newNotification: NotificationType = {
-      id: `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: notificationId,
       date: new Date(),
       read: false,
       ...notification
@@ -47,11 +50,17 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     
     setNotifications(prev => [newNotification, ...prev]);
     
-    // Show toast for the new notification
-    toast({
+    // Show toast for the new notification based on type
+    const toastType = notification.type === 'cancelled' ? {
       title: notification.title,
       description: notification.description,
-    });
+      variant: 'destructive' as const
+    } : {
+      title: notification.title,
+      description: notification.description,
+    };
+    
+    toast(toastType);
   };
 
   // Mark a notification as read

@@ -9,23 +9,40 @@ interface OrderConfirmationNotificationProps {
   onClose?: () => void;
 }
 
+// Track already shown notifications to prevent duplicates
+const shownNotifications = new Set<string>();
+
 export const showOrderConfirmation = (orderNumber: string) => {
+  // Check if this notification has already been shown
+  if (shownNotifications.has(orderNumber)) {
+    return; // Skip showing the notification if already shown
+  }
+  
+  // Mark this notification as shown
+  shownNotifications.add(orderNumber);
+  
   // Show the toast notification
   toast.custom((id) => (
     <OrderConfirmationNotification orderNumber={orderNumber} onClose={() => toast.dismiss(id)} />
   ), {
     duration: 8000,
-    id: 'order-confirmation'
+    id: `order-confirmation-${orderNumber}` // Use unique ID based on order number
   });
   
-  // Add to notification center
-  const { addNotification } = require('@/context/NotificationContext').useNotifications();
-  
-  addNotification({
-    title: 'Order Confirmed',
-    description: `Your order #${orderNumber} has been confirmed and is being processed.`,
-    type: 'order'
-  });
+  // Add to notification center - using setTimeout to avoid circular dependency issues
+  setTimeout(() => {
+    try {
+      const { addNotification } = require('@/context/NotificationContext').useNotifications();
+      
+      addNotification({
+        title: 'Order Confirmed',
+        description: `Your order #${orderNumber} has been confirmed and is being processed.`,
+        type: 'order'
+      });
+    } catch (error) {
+      console.error('Error adding notification:', error);
+    }
+  }, 0);
 };
 
 const OrderConfirmationNotification: React.FC<OrderConfirmationNotificationProps> = ({ 

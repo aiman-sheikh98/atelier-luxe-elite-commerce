@@ -8,6 +8,9 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Track notifications to prevent duplicates
+const processedSessions = new Set<string>();
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -70,8 +73,8 @@ serve(async (req) => {
         console.error("Error updating order status:", updateError);
       }
       
-      // Send a notification via the database
-      if (orders[0].user_id) {
+      // Send a notification via the database - only if not processed before
+      if (orders[0].user_id && !processedSessions.has(sessionId)) {
         try {
           // Add order confirmation notification to the notifications table
           await serviceClient.from("notifications").insert({
@@ -81,6 +84,11 @@ serve(async (req) => {
             type: "order",
             read: false
           });
+          
+          // Mark this session as processed
+          processedSessions.add(sessionId);
+          
+          console.log(`Notification created for order ${orders[0].id}`);
         } catch (notificationError) {
           console.error("Error creating notification:", notificationError);
         }

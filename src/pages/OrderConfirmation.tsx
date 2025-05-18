@@ -8,6 +8,7 @@ import Footer from '@/components/layout/Footer';
 import { verifyPaymentSession } from '@/services/StripeService';
 import { useCart } from '@/context/CartContext';
 import { useNotifications } from '@/context/NotificationContext';
+import { showOrderConfirmation } from '@/components/notification/OrderConfirmation';
 
 const OrderConfirmation = () => {
   const { orderId } = useParams<{ orderId: string }>();
@@ -15,7 +16,6 @@ const OrderConfirmation = () => {
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [notificationSent, setNotificationSent] = useState(false);
   const { clearCart } = useCart();
-  const { addNotification } = useNotifications();
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -34,13 +34,10 @@ const OrderConfirmation = () => {
         if (result?.success && result.payment_status) {
           setPaymentStatus(result.payment_status);
           
-          // If payment is successful and notification not yet sent, add notification
+          // If payment is successful and notification not yet sent, show notification
           if (result.payment_status === 'paid' && !notificationSent) {
-            addNotification({
-              title: 'Order Confirmed',
-              description: `Your order #${orderId.substring(0, 8)} has been confirmed and is being processed.`,
-              type: 'order'
-            });
+            // Show order confirmation notification
+            showOrderConfirmation(orderId.substring(0, 8));
             setNotificationSent(true);
           }
         } else {
@@ -54,7 +51,7 @@ const OrderConfirmation = () => {
     };
     
     verifyPayment();
-  }, [orderId, clearCart, addNotification, notificationSent]);
+  }, [orderId, clearCart, notificationSent]);
   
   // If no order ID is provided, redirect to home
   if (!orderId && !isVerifying) {

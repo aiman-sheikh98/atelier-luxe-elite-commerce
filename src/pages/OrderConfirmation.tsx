@@ -14,6 +14,7 @@ const OrderConfirmation = () => {
   const [isVerifying, setIsVerifying] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [notificationSent, setNotificationSent] = useState(false);
+  const [orderDate, setOrderDate] = useState<Date | null>(null);
   const { clearCart } = useCart();
   const navigate = useNavigate();
   
@@ -32,6 +33,13 @@ const OrderConfirmation = () => {
         
         if (result?.success && result.payment_status) {
           setPaymentStatus(result.payment_status);
+          
+          // Extract order date from session if available
+          if (result.session?.created) {
+            // Convert timestamp to Date object (Stripe timestamps are in seconds)
+            const createdDate = new Date(result.session.created * 1000);
+            setOrderDate(createdDate);
+          }
           
           // If payment is successful and notification not yet sent, show notification
           if (result.payment_status === 'paid' && !notificationSent) {
@@ -76,6 +84,18 @@ const OrderConfirmation = () => {
     }
   };
   
+  // Format date for display
+  const formatOrderDate = (date: Date | null) => {
+    if (!date) return "Processing date...";
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+  
   // If no order ID is provided, redirect to home
   if (!orderId && !isVerifying) {
     navigate('/');
@@ -109,9 +129,14 @@ const OrderConfirmation = () => {
             
             <div className="bg-muted p-6 mb-8 rounded-md">
               <p className="font-medium text-lg mb-2">Order #{orderId}</p>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground mb-2">
                 A confirmation email has been sent to your registered email address.
               </p>
+              {orderDate && (
+                <p className="text-sm text-muted-foreground">
+                  Order placed on {formatOrderDate(orderDate)}
+                </p>
+              )}
               {paymentStatus && (
                 <p className="mt-2 font-medium">
                   Payment Status: <span className="capitalize">{paymentStatus}</span>

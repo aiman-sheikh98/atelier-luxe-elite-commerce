@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from '@/components/ui/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 export type NotificationType = {
   id: string;
@@ -35,6 +36,62 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   // Calculate unread count
   const unreadCount = notifications.filter(notification => !notification.read).length;
+
+  // Setup real-time notification listener
+  useEffect(() => {
+    // Listen for database notifications if user is authenticated
+    const setupRealtimeNotifications = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) return;
+      
+      // Subscribe to notification changes for the authenticated user
+      const channel = supabase
+        .channel('db-notifications')
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${user.id}`,
+        }, (payload) => {
+          console.log('New notification received:', payload);
+          
+          if (payload.new) {
+            const newNotification: NotificationType = {
+              id: payload.new.id,
+              title: payload.new.title,
+              description: payload.new.description,
+              read: payload.new.read || false,
+              date: new Date(payload.new.created_at),
+              type: payload.new.type || 'system',
+            };
+            
+            // Add the new notification to state
+            setNotifications(prev => [newNotification, ...prev]);
+            
+            // Show toast for the new notification
+            const toastType = newNotification.type === 'cancelled' ? {
+              title: newNotification.title,
+              description: newNotification.description,
+              variant: 'destructive' as const
+            } : {
+              title: newNotification.title,
+              description: newNotification.description,
+            };
+            
+            toast(toastType);
+          }
+        })
+        .subscribe();
+      
+      // Cleanup function
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    };
+    
+    setupRealtimeNotifications();
+  }, []);
 
   // Add a notification
   const addNotification = (notification: Omit<NotificationType, 'id' | 'date' | 'read'>) => {

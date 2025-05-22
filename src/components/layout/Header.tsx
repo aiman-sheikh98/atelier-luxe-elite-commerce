@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import NotificationDropdown from '@/components/notification/NotificationDropdown';
+import SupportDialog from '@/components/support/SupportDialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const Header = () => {
@@ -66,6 +67,9 @@ const Header = () => {
             <Button variant="ghost" size="icon" onClick={toggleSearch} className="text-foreground">
               <Search size={20} />
             </Button>
+            
+            {/* Support dialog */}
+            <SupportDialog />
             
             {/* Notification dropdown */}
             <NotificationDropdown />

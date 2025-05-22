@@ -62,7 +62,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
               title: payload.new.title,
               description: payload.new.description,
               read: payload.new.read || false,
-              date: new Date(payload.new.created_at),
+              date: new Date(), // Use current timestamp for real-time notifications
               type: payload.new.type || 'system',
             };
             
@@ -100,7 +100,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     
     const newNotification: NotificationType = {
       id: notificationId,
-      date: new Date(),
+      date: new Date(), // Always use current timestamp
       read: false,
       ...notification
     };
@@ -149,7 +149,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         title: 'Welcome to LUXE',
         description: 'Thank you for joining our luxury shopping experience.',
         read: false,
-        date: new Date(Date.now() - 1000 * 60 * 60), // 1 hour ago
+        date: new Date(), // Use current timestamp
         type: 'system'
       },
       {
@@ -157,7 +157,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         title: 'New Collection Available',
         description: 'Discover our latest Spring/Summer collection, now available online.',
         read: false,
-        date: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
+        date: new Date(), // Use current timestamp
         type: 'promotion'
       }
     ];

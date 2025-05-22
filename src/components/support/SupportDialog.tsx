@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { HelpCircle, Send, X } from 'lucide-react';
+import { HelpCircle, Send, X, Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,

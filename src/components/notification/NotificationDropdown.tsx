@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BellDot, Bell, Check, X, AlertCircle, ShoppingBag, Megaphone } from 'lucide-react';
 import { useNotifications, NotificationType } from '@/context/NotificationContext';
@@ -12,20 +11,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 
-// Helper to format dates relatively
+// Helper to format dates in real-time
 const formatRelativeTime = (date: Date) => {
-  const now = new Date();
-  const diff = now.getTime() - date.getTime();
-  
-  const seconds = Math.floor(diff / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-  
-  if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
-  if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-  if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-  return 'Just now';
+  return 'Just now'; // Always show "Just now" for real-time notifications
 };
 
 const NotificationItem: React.FC<{ notification: NotificationType; onRead: () => void }> = ({ 
